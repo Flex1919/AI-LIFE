@@ -7,7 +7,8 @@
 <meta name="theme-color" content="#081326">
 <meta name="description" content="AI LIFE - Tu asistente personal inteligente">
 <link rel="manifest" href="./manifest.json">
-<title>AI LIFE 2.0</title>
+<title>AI LIFE 2.1</title>
+
 <style>
 :root{
   --bg:#081326;--panel:#111f38;--panel2:#172944;
@@ -16,27 +17,31 @@
 }
 *{box-sizing:border-box}
 body{
-  margin:0;background:radial-gradient(circle at 50% -20%,#1c4770,transparent 45%),var(--bg);
-  color:var(--text);font-family:system-ui,Arial,sans-serif;min-height:100vh
+  margin:0;
+  background:radial-gradient(circle at 50% -20%,#1c4770,transparent 45%),var(--bg);
+  color:var(--text);
+  font-family:system-ui,Arial,sans-serif;
+  min-height:100vh
 }
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
 .app{max-width:850px;margin:auto;padding:20px 16px 90px}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{
- width:48px;height:48px;border-radius:16px;
- display:grid;place-items:center;font-weight:900;font-size:22px;color:#071326;
- background:linear-gradient(135deg,var(--blue),var(--cyan));
- box-shadow:0 0 25px #62b7ff55
+  width:48px;height:48px;border-radius:16px;
+  display:grid;place-items:center;font-weight:900;font-size:22px;color:#071326;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 0 25px #62b7ff55
 }
 .brand h1{font-size:19px;margin:0;letter-spacing:2px}
 .brand small{color:var(--muted);font-size:10px;letter-spacing:1px}
 .status{font-size:11px;color:var(--cyan);border:1px solid #326078;padding:7px 10px;border-radius:20px}
 .hero{
- padding:25px 21px;border:1px solid #315477;border-radius:25px;
- background:linear-gradient(130deg,#183657,#142641 70%,#173d50);
- box-shadow:0 15px 45px #0004
+  padding:25px 21px;border:1px solid #315477;border-radius:25px;
+  background:linear-gradient(130deg,#183657,#142641 70%,#173d50);
+  box-shadow:0 15px 45px #0004
 }
 .eyebrow{color:var(--cyan);font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase}
 h2{font-size:29px;line-height:1.15;margin:12px 0}
@@ -44,29 +49,29 @@ h2{font-size:29px;line-height:1.15;margin:12px 0}
 .section-title{font-size:17px;margin:26px 2px 13px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .tile{
- text-align:left;color:var(--text);background:var(--panel);
- border:1px solid var(--line);border-radius:19px;padding:17px;
- min-height:135px;transition:.2s
+  text-align:left;color:var(--text);background:var(--panel);
+  border:1px solid var(--line);border-radius:19px;padding:17px;
+  min-height:135px;transition:.2s
 }
 .tile:active{transform:scale(.97)}
 .tile .ico{font-size:26px;color:var(--cyan)}
 .tile b{display:block;margin:10px 0 5px}
 .tile small{color:var(--muted);line-height:1.4}
 .panel{
- margin-top:17px;padding:18px;background:var(--panel);
- border:1px solid var(--line);border-radius:20px
+  margin-top:17px;padding:18px;background:var(--panel);
+  border:1px solid var(--line);border-radius:20px
 }
 .panel h3{margin:0 0 13px}
 .field{
- width:100%;padding:13px;border-radius:13px;
- background:#09172b;border:1px solid #344b6b;color:white;outline:none
+  width:100%;padding:13px;border-radius:13px;
+  background:#09172b;border:1px solid #344b6b;color:white;outline:none
 }
 .field:focus{border-color:var(--cyan)}
 textarea.field{min-height:105px;resize:vertical}
 .btn{
- border:0;border-radius:13px;padding:12px 17px;
- background:linear-gradient(100deg,#58a9f5,#62dfd6);
- color:#071326;font-weight:800
+  border:0;border-radius:13px;padding:12px 17px;
+  background:linear-gradient(100deg,#58a9f5,#62dfd6);
+  color:#071326;font-weight:800
 }
 .btn.secondary{background:#263c5b;color:white;border:1px solid #405979}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
@@ -85,18 +90,28 @@ textarea.field{min-height:105px;resize:vertical}
 .task small{display:block;color:var(--muted);font-size:11px}
 .delete{border:0;background:none;color:#ff9999;font-size:20px}
 .notice{background:#273044;padding:12px;border-radius:12px;color:#d2dfef;font-size:12px;line-height:1.5;margin-top:13px}
+.voice-status{margin-top:10px;min-height:20px}
 footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}.hero{padding:34px}h2{font-size:35px}}
+@media(min-width:600px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .hero{padding:34px}
+  h2{font-size:35px}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
  <div class="brand">
   <div class="logo">AI</div>
-  <div><h1>AI LIFE</h1><small>ASISTENTE PERSONAL INTELIGENTE</small></div>
+  <div>
+   <h1>AI LIFE</h1>
+   <small>ASISTENTE PERSONAL INTELIGENTE</small>
+  </div>
  </div>
- <div class="status">● VERSIÓN 2.0</div>
+ <div class="status">● VERSIÓN 2.1</div>
 </header>
 
 <main id="home">
@@ -107,45 +122,78 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
  </section>
 
  <h3 class="section-title">¿Qué necesitas hoy?</h3>
+
  <div class="grid">
-  <button class="tile" data-open="chat"><span class="ico">✦</span><b>Asistente IA</b><small>Conversa y encuentra orientación.</small></button>
-  <button class="tile" data-open="tasks"><span class="ico">✓</span><b>Mis tareas</b><small>Organiza tus pendientes.</small></button>
-  <button class="tile" data-open="writer"><span class="ico">✎</span><b>Crear textos</b><small>Redacta mensajes y documentos.</small></button>
-  <button class="tile" data-open="learn"><span class="ico">⌘</span><b>Aprender</b><small>Descubre nuevas herramientas.</small></button>
+  <button class="tile" data-open="chat">
+   <span class="ico">✦</span><b>Asistente IA</b>
+   <small>Conversa y encuentra orientación.</small>
+  </button>
+  <button class="tile" data-open="tasks">
+   <span class="ico">✓</span><b>Mis tareas</b>
+   <small>Organiza tus pendientes.</small>
+  </button>
+  <button class="tile" data-open="writer">
+   <span class="ico">✎</span><b>Crear textos</b>
+   <small>Redacta mensajes y documentos.</small>
+  </button>
+  <button class="tile" data-open="learn">
+   <span class="ico">⌘</span><b>Aprender</b>
+   <small>Descubre nuevas herramientas.</small>
+  </button>
  </div>
 
  <section class="panel">
   <div class="eyebrow">Tu espacio</div>
-  <h3>Bienvenido a AI LIFE 2.0</h3>
+  <h3>Bienvenido a AI LIFE 2.1</h3>
   <p class="muted">Un espacio para organizar tus ideas, avanzar en tus objetivos y resolver situaciones cotidianas.</p>
   <button class="btn" data-open="chat">Hablar con mi asistente →</button>
  </section>
 </main>
 
+<!-- ASISTENTE -->
 <section id="chat" class="hidden">
  <button class="back" data-home>← Inicio</button>
+
  <div class="panel">
   <div class="eyebrow">Asistente personal</div>
   <h2>¿En qué puedo ayudarte?</h2>
-  <p class="muted">Cuéntame qué necesitas resolver.</p>
+  <p class="muted">Escribe o habla con tu asistente.</p>
+
   <div id="chatlog" class="chatlog">
    <div class="bubble bot">¡Hola! Soy AI LIFE. Cuéntame qué situación quieres resolver y buscaremos una manera de organizarla.</div>
   </div>
+
   <textarea id="chatinput" class="field" placeholder="Escribe tu consulta aquí..."></textarea>
+
   <div class="actions">
    <button class="btn" id="sendchat">Enviar consulta</button>
    <button class="btn secondary" id="clearchat">Limpiar</button>
   </div>
-  <div class="notice">Esta versión utiliza respuestas locales de demostración. Todavía no está conectada a un modelo de IA externo.</div>
+
+  <div class="actions">
+   <button class="btn secondary" id="micchat">🎙️ Hablar</button>
+   <button class="btn secondary" id="speakchat">🔊 Escuchar respuesta</button>
+   <button class="btn secondary" id="stopvoice">⏹️ Detener voz</button>
+  </div>
+
+  <p id="voicestatus" class="muted voice-status">Puedes escribir o utilizar las funciones de voz.</p>
+
+  <div class="notice">
+   Esta versión utiliza respuestas locales de demostración. Todavía no está conectada a un modelo de IA externo.
+  </div>
  </div>
 </section>
 
+<!-- TAREAS -->
 <section id="tasks" class="hidden">
  <button class="back" data-home>← Inicio</button>
+
  <div class="panel">
   <div class="eyebrow">Productividad</div>
   <h2>Mis tareas</h2>
+
   <input id="taskinput" class="field" placeholder="¿Qué necesitas hacer?">
+
   <div class="actions">
    <input id="taskdate" class="field" type="date">
    <select id="taskpriority" class="field">
@@ -154,19 +202,27 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
     <option value="Baja">Prioridad baja</option>
    </select>
   </div>
-  <div class="actions"><button class="btn" id="addtask">+ Agregar tarea</button></div>
+
+  <div class="actions">
+   <button class="btn" id="addtask">+ Agregar tarea</button>
+  </div>
+
   <div id="tasklist" style="margin-top:15px"></div>
   <p class="muted">Tus tareas se guardan en este navegador.</p>
  </div>
 </section>
 
+<!-- CREAR TEXTOS -->
 <section id="writer" class="hidden">
  <button class="back" data-home>← Inicio</button>
+
  <div class="panel">
   <div class="eyebrow">Comunicación inteligente</div>
   <h2>Creador de textos</h2>
+
   <label class="muted" for="textpurpose">¿Qué necesitas escribir?</label>
   <input id="textpurpose" class="field" placeholder="Ej.: solicitar información de un curso">
+
   <label class="muted" for="texttone">Selecciona el tono</label>
   <select id="texttone" class="field" style="margin-top:7px">
    <option>Amable y profesional</option>
@@ -174,39 +230,64 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
    <option>Cercano</option>
    <option>Breve y directo</option>
   </select>
-  <div class="actions"><button class="btn" id="maketext">Crear borrador</button></div>
+
+  <div class="actions">
+   <button class="btn" id="maketext">Crear borrador</button>
+  </div>
+
   <textarea id="textresult" class="field" style="margin-top:13px;min-height:180px" placeholder="Tu texto aparecerá aquí..."></textarea>
-  <div class="actions"><button class="btn secondary" id="copytext">Copiar texto</button></div>
+
+  <div class="actions">
+   <button class="btn secondary" id="copytext">Copiar texto</button>
+  </div>
  </div>
 </section>
 
+<!-- APRENDER -->
 <section id="learn" class="hidden">
  <button class="back" data-home>← Inicio</button>
+
  <div class="panel">
   <div class="eyebrow">Aprendizaje</div>
   <h2>Aprende algo nuevo</h2>
+
   <h3>¿Qué es la inteligencia artificial?</h3>
   <p class="muted">Es una tecnología que permite a los sistemas informáticos realizar tareas que normalmente requieren capacidades humanas, como reconocer patrones, comprender lenguaje o generar contenido.</p>
+
   <h3>¿Qué es un prompt?</h3>
   <p class="muted">Es una instrucción que damos a una herramienta de IA para indicarle qué necesitamos y cómo queremos recibir el resultado.</p>
+
   <h3>Un consejo</h3>
   <p class="muted">Explica tu objetivo, proporciona contexto y pide el formato de respuesta que te resulte más útil.</p>
  </div>
 </section>
 
-<footer>AI LIFE 2.0 · Tu compañero digital</footer>
+<footer>AI LIFE 2.1 · Tu compañero digital</footer>
 </div>
 
 <script>
+/* NAVEGACIÓN */
 const sections=["home","chat","tasks","writer","learn"];
+
 function show(id){
- sections.forEach(s=>document.getElementById(s).classList.toggle("hidden",s!==id));
+ sections.forEach(s=>{
+  document.getElementById(s).classList.toggle("hidden",s!==id);
+ });
  window.scrollTo(0,0);
 }
-document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.open)));
-document.querySelectorAll("[data-home]").forEach(b=>b.addEventListener("click",()=>show("home")));
 
+document.querySelectorAll("[data-open]").forEach(b=>{
+ b.addEventListener("click",()=>show(b.dataset.open));
+});
+
+document.querySelectorAll("[data-home]").forEach(b=>{
+ b.addEventListener("click",()=>show("home"));
+});
+
+/* CHAT */
 const log=document.getElementById("chatlog");
+const chatInput=document.getElementById("chatinput");
+
 function bubble(text,who){
  const d=document.createElement("div");
  d.className="bubble "+who;
@@ -214,98 +295,243 @@ function bubble(text,who){
  log.appendChild(d);
  log.scrollTop=log.scrollHeight;
 }
-document.getElementById("sendchat").onclick=()=>{
- const el=document.getElementById("chatinput");
- const q=el.value.trim();
- if(!q)return;
- bubble(q,"user");
- el.value="";
+
+function getAnswer(q){
  const lower=q.toLowerCase();
- let answer="Vamos a organizarlo paso a paso.\n\n1. Define qué resultado necesitas.\n2. Identifica qué es lo más importante.\n3. Divide el problema en pequeñas acciones.\n4. Comienza por una acción sencilla.\n\nSi me das más contexto, podremos ordenar mejor tus opciones.";
+
  if(/tarea|tiempo|organizar|pendiente|estudiar/.test(lower)){
-  answer="Te propongo un plan sencillo:\n\n1. Escribe todas tus actividades.\n2. Marca las que tienen fecha límite.\n3. Separa las tareas grandes en pasos pequeños.\n4. Elige una prioridad para comenzar.\n5. Revisa tus avances al final del día.\n\nPuedes registrar tus actividades en Mis tareas.";
- }else if(/mensaje|correo|escribir|texto/.test(lower)){
-  answer="Para preparar un buen texto, aclaremos tres cosas:\n\n1. ¿A quién va dirigido?\n2. ¿Qué quieres comunicar?\n3. ¿Qué respuesta esperas recibir?\n\nTambién puedes usar nuestro Creador de textos.";
- }else if(/problema|decidir|decisión|dificil|difícil/.test(lower)){
-  answer="Podemos analizar tu situación con calma:\n\n1. Describe el problema concreto.\n2. Identifica qué cosas están bajo tu control.\n3. Piensa en dos posibles alternativas.\n4. Compara sus ventajas y desventajas.\n5. Elige un siguiente paso seguro y realista.";
+  return "Te propongo un plan sencillo:\n\n1. Escribe todas tus actividades.\n2. Marca las que tienen fecha límite.\n3. Separa las tareas grandes en pasos pequeños.\n4. Elige una prioridad para comenzar.\n5. Revisa tus avances al final del día.\n\nPuedes registrar tus actividades en Mis tareas.";
  }
+
+ if(/mensaje|correo|escribir|texto/.test(lower)){
+  return "Para preparar un buen texto, aclaremos tres cosas:\n\n1. ¿A quién va dirigido?\n2. ¿Qué quieres comunicar?\n3. ¿Qué respuesta esperas recibir?\n\nTambién puedes usar nuestro Creador de textos.";
+ }
+
+ if(/problema|decidir|decisión|dificil|difícil/.test(lower)){
+  return "Podemos analizar tu situación con calma:\n\n1. Describe el problema concreto.\n2. Identifica qué cosas están bajo tu control.\n3. Piensa en dos posibles alternativas.\n4. Compara sus ventajas y desventajas.\n5. Elige un siguiente paso seguro y realista.";
+ }
+
+ return "Vamos a organizarlo paso a paso.\n\n1. Define qué resultado necesitas.\n2. Identifica qué es lo más importante.\n3. Divide el problema en pequeñas acciones.\n4. Comienza por una acción sencilla.\n\nSi me das más contexto, podremos ordenar mejor tus opciones.";
+}
+
+document.getElementById("sendchat").onclick=()=>{
+ const q=chatInput.value.trim();
+ if(!q)return;
+
+ bubble(q,"user");
+ chatInput.value="";
+
+ const answer=getAnswer(q);
  bubble(answer,"bot");
 };
+
+chatInput.addEventListener("keydown",e=>{
+ if(e.key==="Enter" && !e.shiftKey){
+  e.preventDefault();
+  document.getElementById("sendchat").click();
+ }
+});
+
 document.getElementById("clearchat").onclick=()=>{
+ window.speechSynthesis?.cancel();
  log.innerHTML="";
  bubble("¡Hola! Soy AI LIFE. ¿Qué situación quieres resolver hoy?","bot");
 };
 
+/* FUNCIONES DE VOZ */
+const voiceStatus=document.getElementById("voicestatus");
+const micButton=document.getElementById("micchat");
+const speakButton=document.getElementById("speakchat");
+const stopButton=document.getElementById("stopvoice");
+
+let recognition=null;
+let listening=false;
+
+/* LEER RESPUESTAS */
+if("speechSynthesis" in window){
+ speakButton.onclick=()=>{
+  const messages=log.querySelectorAll(".bot");
+
+  if(!messages.length)return;
+
+  const lastMessage=messages[messages.length-1].textContent;
+
+  window.speechSynthesis.cancel();
+
+  const speech=new SpeechSynthesisUtterance(lastMessage);
+  speech.lang="es-CO";
+  speech.rate=1;
+
+  window.speechSynthesis.speak(speech);
+  voiceStatus.textContent="AI LIFE está leyendo su respuesta.";
+ };
+
+ stopButton.onclick=()=>{
+  window.speechSynthesis.cancel();
+  voiceStatus.textContent="Lectura detenida.";
+ };
+}else{
+ speakButton.disabled=true;
+ voiceStatus.textContent="La lectura de voz no está disponible en este navegador.";
+ stopButton.disabled=true;
+}
+
+/* RECONOCER VOZ */
+const SpeechRecognition=
+ window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if(SpeechRecognition){
+ recognition=new SpeechRecognition();
+ recognition.lang="es-CO";
+ recognition.continuous=false;
+ recognition.interimResults=false;
+
+ micButton.onclick=()=>{
+  if(listening)return;
+
+  try{
+   recognition.start();
+   listening=true;
+   voiceStatus.textContent="Te estoy escuchando...";
+  }catch(error){
+   voiceStatus.textContent="No se pudo iniciar el micrófono. Inténtalo nuevamente.";
+  }
+ };
+
+ recognition.onresult=event=>{
+  chatInput.value=event.results[0][0].transcript;
+  voiceStatus.textContent="Consulta reconocida. Pulsa Enviar consulta.";
+ };
+
+ recognition.onerror=()=>{
+  voiceStatus.textContent="No pude reconocer tu voz. Revisa el permiso del micrófono.";
+ };
+
+ recognition.onend=()=>{
+  listening=false;
+  if(voiceStatus.textContent==="Te estoy escuchando..."){
+   voiceStatus.textContent="Puedes volver a intentarlo.";
+  }
+ };
+}else{
+ micButton.disabled=true;
+ voiceStatus.textContent="El reconocimiento de voz no está disponible en este navegador. Puedes escribir tu consulta.";
+}
+
+/* TAREAS */
 let tasks=[];
-try{tasks=JSON.parse(localStorage.getItem("ailife_tasks_v2")||"[]");}catch(e){tasks=[];}
+
+try{
+ tasks=JSON.parse(localStorage.getItem("ailife_tasks_v2")||"[]");
+}catch(e){
+ tasks=[];
+}
+
 function saveTasks(){
  localStorage.setItem("ailife_tasks_v2",JSON.stringify(tasks));
  renderTasks();
 }
+
 function renderTasks(){
  const list=document.getElementById("tasklist");
  list.innerHTML="";
+
  if(!tasks.length){
   list.textContent="Todavía no tienes tareas.";
   list.className="muted";
   return;
  }
+
  list.className="";
+
  tasks.forEach((t,i)=>{
   const row=document.createElement("div");
   row.className="task";
+
   const cb=document.createElement("input");
   cb.type="checkbox";
   cb.checked=t.done;
-  cb.onchange=()=>{tasks[i].done=cb.checked;saveTasks();};
+
+  cb.onchange=()=>{
+   tasks[i].done=cb.checked;
+   saveTasks();
+  };
+
   const info=document.createElement("span");
   info.textContent=t.text;
+
   const details=document.createElement("small");
   details.textContent="Prioridad: "+t.priority+(t.date?" · Fecha: "+t.date:"");
   info.appendChild(details);
+
   if(t.done)info.style.textDecoration="line-through";
+
   const del=document.createElement("button");
   del.className="delete";
   del.textContent="×";
   del.setAttribute("aria-label","Eliminar tarea");
-  del.onclick=()=>{tasks.splice(i,1);saveTasks();};
+
+  del.onclick=()=>{
+   tasks.splice(i,1);
+   saveTasks();
+  };
+
   row.append(cb,info,del);
   list.appendChild(row);
  });
 }
+
 document.getElementById("addtask").onclick=()=>{
  const el=document.getElementById("taskinput");
  const value=el.value.trim();
+
  if(!value)return;
+
  tasks.push({
   text:value,
   date:document.getElementById("taskdate").value,
   priority:document.getElementById("taskpriority").value,
   done:false
  });
+
  el.value="";
  document.getElementById("taskdate").value="";
  saveTasks();
 };
+
 document.getElementById("taskinput").addEventListener("keydown",e=>{
- if(e.key==="Enter")document.getElementById("addtask").click();
+ if(e.key==="Enter"){
+  document.getElementById("addtask").click();
+ }
 });
+
 renderTasks();
 
+/* CREADOR DE TEXTOS */
 document.getElementById("maketext").onclick=()=>{
  const purpose=document.getElementById("textpurpose").value.trim();
  const tone=document.getElementById("texttone").value;
- if(!purpose){alert("Escribe primero qué necesitas comunicar.");return;}
+
+ if(!purpose){
+  alert("Escribe primero qué necesitas comunicar.");
+  return;
+ }
+
  let opening="Buen día.";
+
  if(tone==="Formal")opening="Cordial saludo.";
  if(tone==="Cercano")opening="¡Hola! Espero que estés muy bien.";
  if(tone==="Breve y directo")opening="Hola.";
+
  document.getElementById("textresult").value=
  opening+"\n\nMe comunico para "+purpose+". Agradecería mucho tu orientación o respuesta cuando te sea posible.\n\nMuchas gracias por tu tiempo.\nSaludos.";
 };
+
 document.getElementById("copytext").onclick=async()=>{
  const value=document.getElementById("textresult").value;
+
  if(!value)return;
+
  try{
   await navigator.clipboard.writeText(value);
   alert("Texto copiado correctamente.");
@@ -313,8 +539,12 @@ document.getElementById("copytext").onclick=async()=>{
   alert("Selecciona el texto y cópialo manualmente.");
  }
 };
+
+/* SERVICE WORKER */
 if("serviceWorker" in navigator){
- window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("./sw.js").catch(()=>{});
+ });
 }
 </script>
 </body>
