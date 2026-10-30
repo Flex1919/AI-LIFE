@@ -1,0 +1,23 @@
+AI LIFE - Prototipo PWA 1.0
+
+CONTENIDO
+- index.html: interfaz y funciones del prototipo.
+- manifest.json: configuración de instalación PWA.
+- sw.js: caché básica para uso sin conexión.
+
+IMPORTANTE
+El asistente conversacional y el creador de textos están en modo demostración:
+usan respuestas y plantillas locales, no un modelo de IA conectado.
+El organizador guarda tareas en el almacenamiento local del navegador.
+
+PARA PROBAR
+1. Descomprime la carpeta.
+2. Publica su contenido en un hosting HTTPS estático (por ejemplo, GitHub Pages o Netlify).
+3. Abre el enlace desde Chrome en Android o Safari en iPhone.
+4. Usa la opción "Instalar aplicación" o "Añadir a pantalla de inicio".
+
+La instalación PWA requiere HTTPS (excepto localhost).
+Para conectar un modelo real de IA, hace falta crear un backend seguro y configurar allí la clave API.
+No pongas claves API dentro de index.html ni en archivos públicos.
+
+Este prototipo es una base académica para ampliar y conectar servicios reales.

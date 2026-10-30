@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10182d">
+  <meta name="description" content="AI LIFE: tu asistente inteligente personal.">
+  <link rel="manifest" href="manifest.json">
+  <title>AI LIFE · Asistente personal</title>
+  <style>
+    :root{--bg:#0b1223;--panel:#141f36;--panel2:#1a2945;--text:#f4f7ff;--muted:#aab7d0;--blue:#65b7ff;--cyan:#69e0dc;--line:#293957;--good:#8de0b2}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 80% -10%,#233d68 0,transparent 36%),var(--bg);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+    button,input,textarea{font:inherit} button{cursor:pointer}
+    .app{max-width:760px;margin:auto;padding:22px 16px 90px}
+    header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 26px}
+    .brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:15px;background:linear-gradient(135deg,#367bd7,#70e1dc);display:grid;place-items:center;color:#081326;font-weight:900;font-size:20px;box-shadow:0 8px 28px #367bd755}
+    .brand h1{font-size:18px;letter-spacing:1.5px;margin:0}.brand small{color:var(--muted);display:block;font-size:11px;letter-spacing:1px}
+    .pill{font-size:11px;color:#bce4ff;border:1px solid #35577d;border-radius:99px;padding:7px 10px}
+    .hero{padding:22px;border:1px solid #304667;border-radius:24px;background:linear-gradient(130deg,#172b4b,#17243d 65%,#1b3449);box-shadow:0 18px 50px #0003}
+    .eyebrow{color:var(--cyan);font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase}
+    h2{font-size:27px;line-height:1.15;margin:9px 0}.hero p{color:#c4d2e8;line-height:1.5;margin:8px 0 0}
+    .section-title{font-size:16px;margin:25px 2px 12px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .tile{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;text-align:left;color:var(--text);min-height:128px;transition:.15s}
+    .tile:active{transform:scale(.98)}.tile .ico{font-size:24px}.tile b{display:block;margin:9px 0 4px}.tile span:last-child{font-size:12px;color:var(--muted);line-height:1.4}
+    .panel{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:17px}
+    .panel h3{font-size:17px;margin:0 0 12px}
+    .field{width:100%;border:1px solid #354969;background:#0e1930;color:var(--text);border-radius:13px;padding:13px;outline:none}
+    .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #65b7ff22}
+    textarea.field{min-height:100px;resize:vertical}
+    .btn{border:0;border-radius:13px;padding:12px 16px;background:linear-gradient(100deg,#4e9ff0,#64d5d0);color:#071528;font-weight:750}
+    .btn.secondary{background:#243653;color:var(--text);border:1px solid #3b5275}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+    .muted{color:var(--muted);font-size:12px;line-height:1.5}
+    .chatlog{display:flex;flex-direction:column;gap:10px;max-height:320px;overflow:auto;margin:12px 0}
+    .bubble{padding:12px 14px;border-radius:15px;max-width:90%;line-height:1.45;font-size:14px;white-space:pre-wrap}
+    .bot{background:#213452;align-self:flex-start}.user{background:#245c83;align-self:flex-end}
+    .task{display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+    .task:last-child{border:0}.task span{flex:1;overflow-wrap:anywhere}.task.done span{text-decoration:line-through;color:#8190aa}
+    .task input{accent-color:#65d8ca;width:18px;height:18px}.delete{background:none;border:0;color:#ff9b9b;font-size:18px}
+    .hidden{display:none!important}.back{background:none;border:0;color:var(--blue);padding:0;margin:0 0 14px;font-weight:650}
+    .notice{padding:11px 12px;background:#392f1c;border:1px solid #66512c;border-radius:12px;color:#f4d99b;font-size:12px;line-height:1.45;margin-top:12px}
+    footer{text-align:center;color:#7889a7;font-size:11px;margin:28px 0 0}
+    @media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding:30px}h2{font-size:34px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><div class="logo">AI</div><div><h1>AI LIFE</h1><small>ASISTENTE INTELIGENTE PERSONAL</small></div></div>
+    <div class="pill">PROTOTIPO 1.0</div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="eyebrow">Tu día, con más claridad</div>
+      <h2>Hola. ¿Qué necesitas resolver hoy?</h2>
+      <p>Organiza tus ideas, encuentra alternativas y convierte tus pendientes en acciones.</p>
+    </section>
+    <h3 class="section-title">¿En qué te ayudo?</h3>
+    <div class="grid">
+      <button class="tile" data-open="chat"><span class="ico">✦</span><b>Asistente IA</b><span>Piensa una situación y explora posibles soluciones.</span></button>
+      <button class="tile" data-open="tasks"><span class="ico">✓</span><b>Mis tareas</b><span>Organiza pendientes y marca tus avances.</span></button>
+      <button class="tile" data-open="writer"><span class="ico">✎</span><b>Crear un texto</b><span>Prepara mensajes claros para distintas ocasiones.</span></button>
+      <button class="tile" data-open="learn"><span class="ico">⌘</span><b>Aprender</b><span>Descubre cómo funciona la IA y cómo usarla.</span></button>
+    </div>
+    <section class="panel">
+      <h3>Tu espacio personal</h3>
+      <p class="muted">Esta primera versión guarda tus tareas en este dispositivo. El asistente funciona en modo demostración; conectaremos un modelo de IA real en la siguiente etapa.</p>
+    </section>
+  </main>
+
+  <section id="chat" class="hidden">
+    <button class="back" data-home>← Inicio</button>
+    <div class="panel"><div class="eyebrow">Asistente</div><h2 style="font-size:24px">Cuéntame qué sucede</h2><p class="muted">Describe tu situación con tus propias palabras. En esta versión recibirás una guía de ejemplo.</p>
+      <div id="chatlog" class="chatlog"><div class="bubble bot">¡Hola! Soy tu asistente AI LIFE. ¿Qué situación te gustaría resolver?</div></div>
+      <textarea id="chatinput" class="field" placeholder="Ej.: Tengo muchas tareas y no sé por dónde empezar..."></textarea>
+      <div class="actions"><button class="btn" id="sendchat">Enviar consulta</button><button class="btn secondary" id="clearchat">Limpiar</button></div>
+      <div class="notice">Modo demostración: las respuestas son orientativas y no proceden todavía de un modelo de IA conectado.</div>
+    </div>
+  </section>
+
+  <section id="tasks" class="hidden">
+    <button class="back" data-home>← Inicio</button>
+    <div class="panel"><div class="eyebrow">Organización</div><h2 style="font-size:24px">Mis tareas</h2>
+      <div class="actions"><input id="taskinput" class="field" style="flex:1;min-width:180px" placeholder="Escribe una tarea..."><button id="addtask" class="btn">Agregar</button></div>
+      <div id="tasklist" style="margin-top:12px"></div><p class="muted">Tus tareas se guardan localmente en este navegador.</p>
+    </div>
+  </section>
+
+  <section id="writer" class="hidden">
+    <button class="back" data-home>← Inicio</button>
+    <div class="panel"><div class="eyebrow">Comunicación</div><h2 style="font-size:24px">Creador de textos</h2>
+      <label class="muted" for="textpurpose">¿Qué necesitas escribir?</label>
+      <input id="textpurpose" class="field" placeholder="Ej.: pedir información sobre un curso" style="margin:7px 0 12px">
+      <label class="muted" for="texttone">Tono</label>
+      <select id="texttone" class="field" style="margin:7px 0 12px"><option>Amable y profesional</option><option>Formal</option><option>Cercano</option><option>Breve y directo</option></select>
+      <button id="maketext" class="btn">Crear borrador</button>
+      <textarea id="textresult" class="field" style="margin-top:12px;min-height:150px" placeholder="Aquí aparecerá un borrador de ejemplo..."></textarea>
+      <button id="copytext" class="btn secondary">Copiar texto</button>
+      <div class="notice">El borrador se genera con una plantilla local. En la siguiente etapa conectaremos IA generativa para personalizarlo.</div>
+    </div>
+  </section>
+
+  <section id="learn" class="hidden">
+    <button class="back" data-home>← Inicio</button>
+    <div class="panel"><div class="eyebrow">Aprendizaje</div><h2 style="font-size:24px">Una idea de IA al día</h2>
+      <h3>¿Qué es la inteligencia artificial generativa?</h3>
+      <p style="line-height:1.6;color:#c8d5e9">Es un tipo de inteligencia artificial capaz de producir contenido nuevo —como texto, imágenes o código— a partir de patrones aprendidos durante su entrenamiento.</p>
+      <h3>¿Qué es un prompt?</h3>
+      <p style="line-height:1.6;color:#c8d5e9">Es la instrucción o contexto que le das a un modelo para orientar su respuesta. Un buen prompt explica el objetivo, aporta contexto y define el formato esperado.</p>
+      <h3>Reto práctico</h3><p style="line-height:1.6;color:#c8d5e9">Pídele a un asistente de IA que organice una semana de estudio. Incluye tus horarios disponibles, materias y fechas importantes. Luego evalúa si el resultado es realista.</p>
+    </div>
+  </section>
+  <footer>AI LIFE · Proyecto académico de aprendizaje · Versión demostrativa</footer>
+</div>
+<script>
+const sections=['home','chat','tasks','writer','learn'];
+function show(id){sections.forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));window.scrollTo(0,0)}
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.open)));
+document.querySelectorAll('[data-home]').forEach(b=>b.addEventListener('click',()=>show('home')));
+
+const log=document.getElementById('chatlog');
+function addBubble(text,who){const d=document.createElement('div');d.className='bubble '+who;d.textContent=text;log.appendChild(d);log.scrollTop=log.scrollHeight}
+document.getElementById('sendchat').onclick=()=>{
+ const input=document.getElementById('chatinput'), q=input.value.trim(); if(!q)return;
+ addBubble(q,'user'); input.value='';
+ let answer='Podemos ordenar esta situación paso a paso.\\n\\n1. Define cuál es el resultado que necesitas.\\n2. Separa lo urgente de lo que puede esperar.\\n3. Anota dos o tres alternativas.\\n4. Elige una acción pequeña y concreta para comenzar.\\n\\nPara darte una orientación más útil, añade detalles como el plazo, los recursos disponibles y qué has intentado.';
+ const lower=q.toLowerCase();
+ if(lower.includes('tarea')||lower.includes('tiempo')||lower.includes('organ')) answer='Te propongo empezar con una lista breve:\\n\\n1. Anota todo lo pendiente.\\n2. Identifica qué tiene fecha límite cercana.\\n3. Divide las tareas grandes en pasos de 20–30 minutos.\\n4. Elige una sola tarea para comenzar.\\n\\nPuedes registrar tus pendientes en el módulo “Mis tareas”.';
+ else if(lower.includes('mensaje')||lower.includes('escribir')||lower.includes('correo')) answer='Para redactar un buen mensaje, define primero a quién va dirigido, qué necesitas comunicar y qué acción esperas de la otra persona. También puedes usar el módulo “Crear un texto” para preparar un borrador.';
+ setTimeout(()=>addBubble(answer,'bot'),250);
+};
+document.getElementById('clearchat').onclick=()=>{log.innerHTML='<div class="bubble bot">¡Hola! Soy tu asistente AI LIFE. ¿Qué situación te gustaría resolver?</div>'};
+
+let tasks=JSON.parse(localStorage.getItem('ailife_tasks')||'[]');
+function renderTasks(){const list=document.getElementById('tasklist');list.innerHTML='';if(!tasks.length){list.innerHTML='<p class="muted">Todavía no tienes tareas. Agrega la primera.</p>';return}
+ tasks.forEach((t,i)=>{const row=document.createElement('div');row.className='task'+(t.done?' done':'');const cb=document.createElement('input');cb.type='checkbox';cb.checked=t.done;cb.onchange=()=>{tasks[i].done=cb.checked;saveTasks()};const label=document.createElement('span');label.textContent=t.text;const del=document.createElement('button');del.className='delete';del.textContent='×';del.setAttribute('aria-label','Eliminar tarea');del.onclick=()=>{tasks.splice(i,1);saveTasks()};row.append(cb,label,del);list.appendChild(row)})}
+function saveTasks(){localStorage.setItem('ailife_tasks',JSON.stringify(tasks));renderTasks()}
+document.getElementById('addtask').onclick=()=>{const el=document.getElementById('taskinput'),v=el.value.trim();if(!v)return;tasks.push({text:v,done:false});el.value='';saveTasks()};
+document.getElementById('taskinput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addtask').click()});renderTasks();
+
+document.getElementById('maketext').onclick=()=>{const purpose=document.getElementById('textpurpose').value.trim();const tone=document.getElementById('texttone').value;if(!purpose){alert('Escribe primero qué necesitas comunicar.');return}
+ const opening=tone==='Formal'?'Cordial saludo.':tone==='Cercano'?'¡Hola! Espero que estés muy bien.':'Buen día.';
+ document.getElementById('textresult').value=opening+'\\n\\nMe comunico para '+purpose+'. Agradecería mucho tu orientación o respuesta cuando te sea posible.\\n\\nMuchas gracias por tu tiempo.\\nSaludos.';
+};
+document.getElementById('copytext').onclick=async()=>{const t=document.getElementById('textresult').value;if(!t)return;try{await navigator.clipboard.writeText(t);alert('Texto copiado.')}catch(e){alert('Selecciona y copia el texto manualmente.')}};
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>
