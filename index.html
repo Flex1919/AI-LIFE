@@ -1,1080 +1,158 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#081326">
-<meta name="description" content="AI LIFE - Tu asistente personal inteligente">
+<title>AI LIFE 3.3</title>
 <link rel="manifest" href="./manifest.json">
-<title>AI LIFE 3.2</title>
-
 <style>
-:root{
-  --bg:#081326;--panel:#111f38;--panel2:#172944;
-  --text:#f3f7ff;--muted:#9bacc8;--blue:#62b7ff;
-  --cyan:#62e5dc;--line:#263b5b;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:radial-gradient(circle at 50% -20%,#1c4770,transparent 45%),var(--bg);
-  color:var(--text);
-  font-family:system-ui,Arial,sans-serif;
-  min-height:100vh
-}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}
-.app{max-width:850px;margin:auto;padding:20px 16px 90px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:10px}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{
-  width:48px;height:48px;border-radius:16px;
-  display:grid;place-items:center;font-weight:900;font-size:22px;color:#071326;
-  background:linear-gradient(135deg,var(--blue),var(--cyan));
-  box-shadow:0 0 25px #62b7ff55
-}
-.brand h1{font-size:19px;margin:0;letter-spacing:2px}
-.brand small{color:var(--muted);font-size:10px;letter-spacing:1px}
-.status{font-size:11px;color:var(--cyan);border:1px solid #326078;padding:7px 10px;border-radius:20px;white-space:nowrap}
-.hero{
-  padding:25px 21px;border:1px solid #315477;border-radius:25px;
-  background:linear-gradient(130deg,#183657,#142641 70%,#173d50);
-  box-shadow:0 15px 45px #0004
-}
-.eyebrow{color:var(--cyan);font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase}
-h2{font-size:29px;line-height:1.15;margin:12px 0}
-.hero p{color:#c2d4e9;line-height:1.5;margin-bottom:0}
-.section-title{font-size:17px;margin:26px 2px 13px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.tile{
-  text-align:left;color:var(--text);background:var(--panel);
-  border:1px solid var(--line);border-radius:19px;padding:17px;
-  min-height:135px;transition:.2s
-}
-.tile:active{transform:scale(.97)}
-.tile .ico{font-size:26px;color:var(--cyan)}
-.tile b{display:block;margin:10px 0 5px}
-.tile small{color:var(--muted);line-height:1.4}
-.panel{
-  margin-top:17px;padding:18px;background:var(--panel);
-  border:1px solid var(--line);border-radius:20px
-}
-.panel h3{margin:0 0 13px}
-.field{
-  width:100%;padding:13px;border-radius:13px;
-  background:#09172b;border:1px solid #344b6b;color:white;outline:none
-}
-.field:focus{border-color:var(--cyan)}
-textarea.field{min-height:105px;resize:vertical}
-.btn{
-  border:0;border-radius:13px;padding:12px 17px;
-  background:linear-gradient(100deg,#58a9f5,#62dfd6);
-  color:#071326;font-weight:800
-}
-.btn.secondary{background:#263c5b;color:white;border:1px solid #405979}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
-.actions .field{flex:1;min-width:160px}
-.muted{color:var(--muted);font-size:12px;line-height:1.5}
-.hidden{display:none!important}
-.back{border:0;background:none;color:var(--cyan);padding:0;margin:0 0 15px;font-weight:bold}
-.chatlog{display:flex;flex-direction:column;gap:10px;max-height:380px;overflow:auto;margin:15px 0}
-.bubble{padding:13px 15px;border-radius:16px;max-width:92%;font-size:14px;line-height:1.5;white-space:pre-wrap}
-.bot{background:#203653;align-self:flex-start}
-.user{background:#20577a;align-self:flex-end}
-.task{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
-.task span{flex:1;overflow-wrap:anywhere}
-.task.done span{text-decoration:line-through;color:#8190aa}
-.task input[type=checkbox]{width:19px;height:19px;accent-color:#62dfd6}
-.task small{display:block;color:var(--muted);font-size:11px}
-.delete{border:0;background:none;color:#ff9999;font-size:20px}
-.notice{background:#273044;padding:12px;border-radius:12px;color:#d2dfef;font-size:12px;line-height:1.5;margin-top:13px}
-.voice-status{margin-top:10px;min-height:20px}
-footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
-
-/* BIENVENIDA */
-#splash{
-  position:fixed;inset:0;z-index:9999;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  padding:24px;text-align:center;
-  background:radial-gradient(circle at center,#123d70,#030916 75%);
-  overflow:auto;
-}
-#splash img{
-  width:100%;max-width:390px;max-height:55vh;
-  object-fit:contain;border-radius:22px;
-  box-shadow:0 0 35px #168cff66;
-}
-#splash h1{
-  color:#72dfff;font-size:35px;
-  margin:18px 0 5px;letter-spacing:3px;
-}
-#splash p{color:#c4ddff;margin:5px 0 22px}
-#startApp{
-  width:100%;max-width:280px;padding:16px;
-  border:0;border-radius:16px;
-  background:linear-gradient(100deg,#168cff,#61e5df);
-  color:#061326;font-size:17px;font-weight:900;
-  box-shadow:0 0 25px #168cff55;
-}
-#startApp:active{transform:scale(.97)}
-
-/* ACADEMIA */
-.academy-hero{
-  padding:21px;border-radius:20px;
-  background:linear-gradient(135deg,#153d66,#152b48);
-  border:1px solid #315477;margin-bottom:17px
-}
-.academy-hero h2{font-size:25px}
-.progress-track{
-  height:9px;background:#09172b;border-radius:20px;
-  overflow:hidden;margin:10px 0
-}
-.progress-fill{
-  height:100%;width:0;background:linear-gradient(90deg,#58a9f5,#62dfd6);
-  border-radius:20px;transition:.3s
-}
-.category-card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:17px;padding:15px;color:var(--text);
-  text-align:left;min-height:125px
-}
-.category-card:active,.lesson-card:active{transform:scale(.98)}
-.category-icon{font-size:27px;margin-bottom:8px}
-.category-card b,.lesson-card b{display:block;margin-bottom:5px}
-.category-card small,.lesson-card small{color:var(--muted);line-height:1.4}
-.lesson-card{
-  display:block;width:100%;text-align:left;
-  background:var(--panel2);border:1px solid var(--line);
-  color:var(--text);border-radius:15px;padding:15px;margin:10px 0
-}
-.lesson-content{
-  color:#d0def0;font-size:14px;line-height:1.7;
-  white-space:pre-wrap
-}
-.lesson-content h3{color:var(--cyan);margin-top:20px}
-.quiz-option{
-  display:block;width:100%;text-align:left;
-  padding:13px;margin:9px 0;border-radius:12px;
-  border:1px solid #405979;background:#09172b;color:white
-}
-.quiz-option.selected{border-color:var(--cyan);background:#173b53}
-.quiz-option.correct{border-color:#4ad6a0;background:#124536}
-.quiz-option.wrong{border-color:#ff9999;background:#492b37}
-.answer-feedback{
-  padding:13px;border-radius:12px;margin-top:12px;
-  background:#203653;color:#e5f1ff;font-size:13px;line-height:1.5
-}
+:root{--bg:#081326;--panel:#111f38;--panel2:#172944;--blue:#62b7ff;--cyan:#62e5dc;--muted:#a9bad2;--white:#f4f8ff;--line:#29405f;--gold:#ffd36e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#142d50 0,#081326 48%,#050b16 100%);color:var(--white);font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.app{max-width:760px;margin:auto;padding:16px 15px 40px}.hidden{display:none!important}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 2px 18px}.brand{font-weight:900;letter-spacing:1px;font-size:20px}.brand span{color:var(--cyan)}.version{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:5px 9px}
+h1,h2,h3,p{margin-top:0}h1{font-size:27px;margin-bottom:8px}h2{font-size:21px}h3{font-size:17px}.muted{color:var(--muted);line-height:1.5}.panel{background:linear-gradient(145deg,rgba(23,41,68,.97),rgba(14,28,49,.97));border:1px solid var(--line);border-radius:20px;padding:17px;margin:12px 0;box-shadow:0 12px 35px #0003}
+.primary{background:linear-gradient(100deg,#258de8,#35c9d2);color:#031323;font-weight:850;padding:13px 18px;border-radius:13px}.secondary{background:#203958;color:var(--white);padding:11px 14px;border-radius:12px;border:1px solid #355577}.danger{background:#492b3a;color:#ffdce7;padding:9px 12px;border-radius:10px}.small{font-size:13px;padding:9px 12px}.full{width:100%}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.tile{background:linear-gradient(145deg,#172d4c,#10203a);border:1px solid #2a4568;border-radius:18px;padding:17px;text-align:left;color:var(--white);min-height:116px}.tile .emoji{font-size:27px;display:block;margin-bottom:10px}.tile strong{display:block;font-size:16px}.tile small{color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.back{color:var(--cyan);background:transparent;padding:8px 0;font-weight:700}.pill{display:inline-block;background:#203958;border:1px solid #355577;color:#cde7ff;border-radius:30px;padding:5px 10px;font-size:12px;margin:3px 4px 3px 0}
+input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1px solid #35506f;border-radius:12px;padding:12px;margin:6px 0 12px;outline:none}textarea{min-height:105px;resize:vertical}label{font-size:13px;color:#c5d4e8}
+.lesson,.task,.choice{background:#0c1b30;border:1px solid #2a4568;border-radius:14px;padding:13px;margin:9px 0}.choice{width:100%;text-align:left;color:var(--white)}.choice:active{border-color:var(--cyan)}.correct{border-color:#53d6a0;background:#12352f}.wrong{border-color:#ff8294;background:#3b1d2b}
+.stat{flex:1;min-width:95px;background:#0b1a2e;border:1px solid var(--line);padding:12px;border-radius:14px;text-align:center}.stat b{font-size:22px;color:var(--cyan);display:block}.stat span{font-size:12px;color:var(--muted)}
+.progress{height:9px;background:#263a55;border-radius:10px;overflow:hidden}.progress>div{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0}
+.chatlog{max-height:48vh;overflow:auto}.bubble{padding:12px 14px;border-radius:15px;margin:8px 0;line-height:1.45;white-space:pre-wrap}.bot{background:#172d49;margin-right:24px}.user{background:#17466a;margin-left:24px}
+.splash{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}.splashbox{max-width:420px;width:100%}.heroimg{width:min(78vw,290px);height:min(78vw,290px);object-fit:cover;border-radius:50%;border:3px solid #62b7ff;box-shadow:0 0 35px #258de877;margin:10px auto 22px}.splash h1{font-size:35px;letter-spacing:2px}.splash p{color:var(--muted)}
+.notice{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px}
+@media(max-width:420px){.app{padding:12px}.grid{gap:8px}.tile{padding:13px;min-height:105px}h1{font-size:24px}}
 </style>
 </head>
-
 <body>
-
-<div id="splash">
-  <img src="https://flex1919.github.io/AI-LIFE/file_00000000ba6c81f58317195ca9a1400c.png" alt="AI LIFE">
-  <h1>AI LIFE 3.2</h1>
-  <p>Inteligencia para una vida mejor</p>
-  <button id="startApp">COMENZAR</button>
-</div>
-
-<div class="app">
-<header>
- <div class="brand">
-  <div class="logo">AI</div>
-  <div>
-   <h1>AI LIFE</h1>
-   <small>ASISTENTE PERSONAL INTELIGENTE</small>
-  </div>
+<section id="splash" class="splash">
+ <div class="splashbox">
+  <img class="heroimg" src="https://flex1919.github.io/AI-LIFE/file_00000000ba6c81f58317195ca9a1400c.png" alt="Avatar AI LIFE" onerror="this.style.display='none'">
+  <h1>AI <span style="color:#62e5dc">LIFE</span> 3.3</h1>
+  <p>Tu espacio para aprender, organizarte y crear.</p>
+  <button class="primary full" onclick="startApp()">COMENZAR</button>
  </div>
- <div class="status">● VERSIÓN 3.2</div>
-</header>
-
-<main id="home">
- <section class="hero">
-  <div class="eyebrow">Tu compañero digital</div>
-  <h2>Hola. ¿Qué vamos a resolver hoy?</h2>
-  <p>Organiza tu vida, desarrolla tus ideas y encuentra nuevas soluciones con AI LIFE.</p>
- </section>
-
- <h3 class="section-title">¿Qué necesitas hoy?</h3>
+</section>
+<main id="app" class="app hidden">
+<header><div class="brand">AI <span>LIFE</span></div><div class="version">VERSIÓN 3.3</div></header>
+<section id="home">
+ <h1>¡Hola! 👋</h1><p class="muted">¿Qué vamos a lograr hoy?</p>
  <div class="grid">
-  <button class="tile" data-open="chat">
-   <span class="ico">✦</span><b>Asistente IA</b>
-   <small>Conversa y encuentra orientación.</small>
-  </button>
-  <button class="tile" data-open="tasks">
-   <span class="ico">✓</span><b>Mis tareas</b>
-   <small>Organiza tus pendientes.</small>
-  </button>
-  <button class="tile" data-open="writer">
-   <span class="ico">✎</span><b>Crear textos</b>
-   <small>Redacta mensajes y documentos.</small>
-  </button>
-  <button class="tile" data-open="learn">
-   <span class="ico">⌘</span><b>Aprender</b>
-   <small>Explora AI LIFE Academia.</small>
-  </button>
+  <button class="tile" onclick="show('chat')"><span class="emoji">🤖</span><strong>Asistente IA</strong><small>Pregunta y explora</small></button>
+  <button class="tile" onclick="show('tasks')"><span class="emoji">✅</span><strong>Mis tareas</strong><small>Organiza tu día</small></button>
+  <button class="tile" onclick="show('writer')"><span class="emoji">✍️</span><strong>Crear textos</strong><small>Ideas y redacción</small></button>
+  <button class="tile" onclick="show('learn')"><span class="emoji">🚀</span><strong>Aprender</strong><small>Academia Viva 3.3</small></button>
  </div>
+ <div class="panel"><div class="row"><div><h3>Tu avance de aprendizaje</h3><p class="muted" id="homeProgress">Empieza un reto y suma puntos.</p></div><span style="font-size:30px">🏆</span></div><button class="secondary small" onclick="show('learn')">Ir a Academia Viva</button></div>
+</section>
 
- <section class="panel">
-  <div class="eyebrow">Tu espacio</div>
-  <h3>Bienvenido a AI LIFE 3.2</h3>
-  <p class="muted">Un espacio para organizar tus ideas, avanzar en tus objetivos y resolver situaciones cotidianas.</p>
-  <button class="btn" data-open="chat">Hablar con mi asistente →</button>
- </section>
+<section id="chat" class="page hidden">
+ <button class="back" onclick="show('home')">← Inicio</button><h1>Asistente IA 🤖</h1>
+ <p class="muted">Esta versión incluye un asistente de demostración sin conexión a una IA externa.</p>
+ <div id="chatlog" class="panel chatlog"><div class="bubble bot">¡Hola! Soy el asistente de AI LIFE. Puedo ayudarte con ideas, organización y explicaciones sencillas.</div></div>
+ <textarea id="chatInput" placeholder="Escribe tu pregunta..."></textarea><div class="row"><button class="primary" onclick="sendChat()">Enviar</button><button class="secondary" onclick="voiceInput()">🎙️ Dictar</button><button class="secondary" onclick="speakLast()">🔊 Escuchar</button></div>
+ <p class="notice">La conversación es una demostración local; no envía tus mensajes a un servidor.</p>
+</section>
+
+<section id="tasks" class="page hidden">
+ <button class="back" onclick="show('home')">← Inicio</button><h1>Mis tareas ✅</h1><p class="muted">Anota tus pendientes y marca lo que termines.</p>
+ <input id="taskInput" placeholder="Ej. Estudiar matemáticas"><button class="primary full" onclick="addTask()">Agregar tarea</button><div id="taskList"></div>
+</section>
+
+<section id="writer" class="page hidden">
+ <button class="back" onclick="show('home')">← Inicio</button><h1>Crear textos ✍️</h1><p class="muted">Prepara una idea y obtén una estructura inicial.</p>
+ <label>¿Qué quieres crear?</label><select id="textType"><option value="mensaje">Un mensaje</option><option value="historia">Una historia corta</option><option value="correo">Un correo</option><option value="ideas">Una lista de ideas</option></select>
+ <label>Tema o propósito</label><textarea id="textTopic" placeholder="Cuéntame de qué tratará..."></textarea><button class="primary full" onclick="createText()">Crear borrador</button><textarea id="textResult" placeholder="Tu borrador aparecerá aquí..."></textarea><button class="secondary full" onclick="copyText()">Copiar texto</button>
+</section>
+
+<section id="learn" class="page hidden">
+ <button class="back" onclick="show('home')">← Inicio</button><h1>Academia Viva 🚀</h1><p class="muted">Aprende a tu ritmo. Tus puntos y avances se guardan en este dispositivo.</p>
+ <div class="panel">
+  <div class="row"><div><b id="profileTitle">Perfil: Jóvenes</b><p class="muted" style="margin:4px 0">Puedes cambiar el nivel cuando quieras.</p></div><span>🎓</span></div>
+  <select id="profileSelect" onchange="changeProfile()"><option value="niños">Niños</option><option value="jóvenes" selected>Jóvenes</option><option value="adultos">Adultos</option></select>
+  <div class="row">
+   <div class="stat"><b id="points">0</b><span>Puntos</span></div><div class="stat"><b id="streak">0</b><span>Días activos</span></div><div class="stat"><b id="doneCount">0</b><span>Lecciones</span></div>
+  </div>
+  <p style="margin:13px 0 6px">Progreso de lecciones</p><div class="progress"><div id="progressBar"></div></div>
+  <div id="badges" style="margin-top:10px"></div>
+ </div>
+ <div class="panel">
+  <div class="row"><div><h2>🎯 Reto del día</h2><p class="muted">Cinco preguntas nuevas según el día.</p></div><span class="pill">+50 puntos</span></div>
+  <div id="dailyStatus" class="muted">Completa el reto para ganar puntos.</div><button class="primary full" id="dailyButton" onclick="startDaily()">Comenzar reto</button>
+  <div id="dailyQuiz" class="hidden"></div>
+ </div>
+ <h2>Biblioteca de aprendizaje</h2><div id="categories"></div>
+ <div id="lessonArea" class="panel hidden"></div>
+ <div class="panel"><h3>💡 Explícamelo fácil</h3><p class="muted">Escribe un tema y recibe una explicación sencilla de ejemplo.</p><input id="explainInput" placeholder="Ej. ¿Qué es la energía?"><button class="secondary full" onclick="explainTopic()">Explicar tema</button><p id="explainOutput" class="muted" style="margin:12px 0 0"></p></div>
+ <p class="notice">El progreso se guarda localmente en este dispositivo y perfil. Si borras los datos del navegador, podrías perderlo.</p>
+</section>
 </main>
-
-<!-- ASISTENTE -->
-<section id="chat" class="hidden">
- <button class="back" data-home>← Inicio</button>
- <div class="panel">
-  <div class="eyebrow">Asistente personal</div>
-  <h2>¿En qué puedo ayudarte?</h2>
-  <p class="muted">Escribe o habla con tu asistente.</p>
-
-  <div id="chatlog" class="chatlog">
-   <div class="bubble bot">¡Hola! Soy AI LIFE. Cuéntame qué situación quieres resolver y buscaremos una manera de organizarla.</div>
-  </div>
-
-  <textarea id="chatinput" class="field" placeholder="Escribe tu consulta aquí..."></textarea>
-  <div class="actions">
-   <button class="btn" id="sendchat">Enviar consulta</button>
-   <button class="btn secondary" id="clearchat">Limpiar</button>
-  </div>
-  <div class="actions">
-   <button class="btn secondary" id="micchat">🎙️ Hablar</button>
-   <button class="btn secondary" id="speakchat">🔊 Escuchar respuesta</button>
-   <button class="btn secondary" id="stopvoice">⏹️ Detener voz</button>
-  </div>
-  <p id="voicestatus" class="muted voice-status">Puedes escribir o utilizar las funciones de voz.</p>
-  <div class="notice" id="connectionNotice">
-   La conexión con la IA real está pendiente de activación.
-  </div>
- </div>
-</section>
-
-<!-- TAREAS -->
-<section id="tasks" class="hidden">
- <button class="back" data-home>← Inicio</button>
- <div class="panel">
-  <div class="eyebrow">Productividad</div>
-  <h2>Mis tareas</h2>
-  <input id="taskinput" class="field" placeholder="¿Qué necesitas hacer?">
-  <div class="actions">
-   <input id="taskdate" class="field" type="date">
-   <select id="taskpriority" class="field">
-    <option value="Normal">Prioridad normal</option>
-    <option value="Alta">Prioridad alta</option>
-    <option value="Baja">Prioridad baja</option>
-   </select>
-  </div>
-  <div class="actions">
-   <button class="btn" id="addtask">+ Agregar tarea</button>
-  </div>
-  <div id="tasklist" style="margin-top:15px"></div>
-  <p class="muted">Tus tareas se guardan en este navegador.</p>
- </div>
-</section>
-
-<!-- CREAR TEXTOS -->
-<section id="writer" class="hidden">
- <button class="back" data-home>← Inicio</button>
- <div class="panel">
-  <div class="eyebrow">Comunicación inteligente</div>
-  <h2>Creador de textos</h2>
-  <label class="muted" for="textpurpose">¿Qué necesitas escribir?</label>
-  <input id="textpurpose" class="field" placeholder="Ej.: solicitar información de un curso">
-  <label class="muted" for="texttone">Selecciona el tono</label>
-  <select id="texttone" class="field" style="margin-top:7px">
-   <option>Amable y profesional</option>
-   <option>Formal</option>
-   <option>Cercano</option>
-   <option>Breve y directo</option>
-  </select>
-  <div class="actions">
-   <button class="btn" id="maketext">Crear borrador</button>
-  </div>
-  <textarea id="textresult" class="field" style="margin-top:13px;min-height:180px" placeholder="Tu texto aparecerá aquí..."></textarea>
-  <div class="actions">
-   <button class="btn secondary" id="copytext">Copiar texto</button>
-  </div>
- </div>
-</section>
-
-<!-- ACADEMIA -->
-<section id="learn" class="hidden">
- <button class="back" data-home>← Inicio</button>
-
- <div class="academy-hero">
-  <div class="eyebrow">AI LIFE ACADEMIA</div>
-  <h2>Aprende algo nuevo cada día</h2>
-  <p class="muted">Explora temas, descubre conocimientos y avanza a tu propio ritmo.</p>
-  <p class="muted" id="progressText">Tu progreso: 0 lecciones completadas</p>
-  <div class="progress-track">
-   <div class="progress-fill" id="progressBar"></div>
-  </div>
- </div>
-
- <div id="academyHome">
-  <h3 class="section-title">Explora las categorías</h3>
-  <div class="grid" id="categoryGrid"></div>
-
-  <div class="panel">
-   <div class="eyebrow">Tu aprendizaje</div>
-   <h3>Explícamelo fácil</h3>
-   <p class="muted">Escribe un tema y descubre una explicación sencilla.</p>
-   <input id="explainInput" class="field" placeholder="Ej.: ¿Cómo funciona internet?">
-   <div class="actions">
-    <button class="btn" id="explainButton">Explicarme el tema</button>
-   </div>
-   <div id="explainResult" class="answer-feedback hidden"></div>
-  </div>
- </div>
-
- <div id="categoryView" class="hidden">
-  <button class="back" id="backCategories">← Todas las categorías</button>
-  <div class="panel">
-   <div class="eyebrow">Categoría de aprendizaje</div>
-   <h2 id="categoryTitle"></h2>
-   <p class="muted" id="categoryDescription"></p>
-   <div id="lessonList"></div>
-  </div>
- </div>
-
- <div id="lessonView" class="hidden">
-  <button class="back" id="backLessons">← Volver a las lecciones</button>
-  <div class="panel">
-   <div class="eyebrow">Lección AI LIFE</div>
-   <h2 id="lessonTitle"></h2>
-   <div id="lessonContent" class="lesson-content"></div>
-   <div class="actions">
-    <button class="btn" id="startQuiz">Realizar cuestionario →</button>
-   </div>
-   <p class="muted" id="lessonCompletedMessage"></p>
-  </div>
- </div>
-
- <div id="quizView" class="hidden">
-  <button class="back" id="backLesson">← Volver a la lección</button>
-  <div class="panel">
-   <div class="eyebrow">Comprueba lo aprendido</div>
-   <h2 id="quizTitle">Cuestionario</h2>
-   <p class="muted" id="quizCounter"></p>
-   <h3 id="quizQuestion"></h3>
-   <div id="quizOptions"></div>
-   <div id="quizFeedback" class="answer-feedback hidden"></div>
-   <div class="actions">
-    <button class="btn" id="checkAnswer">Comprobar respuesta</button>
-    <button class="btn hidden" id="nextQuestion">Siguiente pregunta</button>
-   </div>
-   <div id="quizFinal" class="hidden">
-    <h3 id="quizResult"></h3>
-    <p class="muted" id="quizResultText"></p>
-    <button class="btn" id="finishQuiz">Volver a las lecciones</button>
-   </div>
-  </div>
- </div>
-</section>
-
-<footer>AI LIFE 3.2 · Tu compañero digital</footer>
-</div>
-
 <script>
-/* BIENVENIDA */
-document.getElementById("startApp").addEventListener("click",()=>{
- document.getElementById("splash").classList.add("hidden");
-});
-
-/* NAVEGACIÓN */
-const sections=["home","chat","tasks","writer","learn"];
-
-function show(id){
- sections.forEach(s=>{
-  document.getElementById(s).classList.toggle("hidden",s!==id);
- });
- window.scrollTo(0,0);
-}
-
-document.querySelectorAll("[data-open]").forEach(b=>{
- b.addEventListener("click",()=>show(b.dataset.open));
-});
-document.querySelectorAll("[data-home]").forEach(b=>{
- b.addEventListener("click",()=>show("home"));
-});
-
-/* CHAT Y CONEXIÓN */
-const log=document.getElementById("chatlog");
-const chatInput=document.getElementById("chatinput");
-const sendButton=document.getElementById("sendchat");
-const connectionNotice=document.getElementById("connectionNotice");
-
-const API_URL="https://ai-life-api.alfonso281901.workers.dev";
-let chatHistory=[];
-
-function bubble(text,who){
- const d=document.createElement("div");
- d.className="bubble "+who;
- d.textContent=text;
- log.appendChild(d);
- log.scrollTop=log.scrollHeight;
-}
-
-function getAnswer(q){
- const lower=q.toLowerCase();
-
- if(/tarea|tiempo|organizar|pendiente|estudiar/.test(lower)){
-  return "Te propongo un plan sencillo:\n\n1. Escribe todas tus actividades.\n2. Marca las que tienen fecha límite.\n3. Separa las tareas grandes en pasos pequeños.\n4. Elige una prioridad para comenzar.\n5. Revisa tus avances al final del día.\n\nPuedes registrar tus actividades en Mis tareas.";
- }
- if(/mensaje|correo|escribir|texto/.test(lower)){
-  return "Para preparar un buen texto, aclaremos tres cosas:\n\n1. ¿A quién va dirigido?\n2. ¿Qué quieres comunicar?\n3. ¿Qué respuesta esperas recibir?\n\nTambién puedes usar nuestro Creador de textos.";
- }
- if(/problema|decidir|decisión|difícil/.test(lower)){
-  return "Podemos analizar tu situación con calma:\n\n1. Describe el problema concreto.\n2. Identifica qué cosas están bajo tu control.\n3. Piensa en dos posibles alternativas.\n4. Compara sus ventajas y desventajas.\n5. Elige un siguiente paso seguro y realista.";
- }
- return "Vamos a organizarlo paso a paso.\n\n1. Define qué resultado necesitas.\n2. Identifica qué es lo más importante.\n3. Divide el problema en pequeñas acciones.\n4. Comienza por una acción sencilla.\n\nSi me das más contexto, podremos ordenar mejor tus opciones.";
-}
-
-sendButton.onclick=async()=>{
- const q=chatInput.value.trim();
- if(!q)return;
-
- bubble(q,"user");
- chatInput.value="";
- chatHistory.push({role:"user",content:q});
- sendButton.disabled=true;
- sendButton.textContent="Conectando...";
-
- try{
-  const response=await fetch(API_URL,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({messages:chatHistory.slice(-12)})
-  });
-  const data=await response.json();
-
-  if(!response.ok || typeof data.answer!=="string" || !data.answer.trim()){
-   throw new Error("Respuesta no disponible");
-  }
-
-  chatHistory.push({role:"assistant",content:data.answer});
-  bubble(data.answer,"bot");
-  connectionNotice.textContent="Conectado al servidor AI LIFE.";
- }catch(error){
-  chatHistory.pop();
-  bubble("La IA real todavía no está activada. Esta es una respuesta de demostración:\n\n"+getAnswer(q),"bot");
-  connectionNotice.textContent="Conexión preparada. Falta activar la clave API en Cloudflare.";
- }finally{
-  sendButton.disabled=false;
-  sendButton.textContent="Enviar consulta";
- }
-};
-
-chatInput.addEventListener("keydown",e=>{
- if(e.key==="Enter" && !e.shiftKey){
-  e.preventDefault();
-  sendButton.click();
- }
-});
-
-document.getElementById("clearchat").onclick=()=>{
- window.speechSynthesis?.cancel();
- log.innerHTML="";
- chatHistory=[];
- bubble("¡Hola! Soy AI LIFE. ¿Qué situación quieres resolver hoy?","bot");
-};
-
-/* FUNCIONES DE VOZ */
-const voiceStatus=document.getElementById("voicestatus");
-const micButton=document.getElementById("micchat");
-const speakButton=document.getElementById("speakchat");
-const stopButton=document.getElementById("stopvoice");
-
-let recognition=null;
-let listening=false;
-
-if("speechSynthesis" in window){
- speakButton.onclick=()=>{
-  const messages=log.querySelectorAll(".bot");
-  if(!messages.length)return;
-  const lastMessage=messages[messages.length-1].textContent;
-  window.speechSynthesis.cancel();
-  const speech=new SpeechSynthesisUtterance(lastMessage);
-  speech.lang="es-CO";
-  speech.rate=1;
-  window.speechSynthesis.speak(speech);
-  voiceStatus.textContent="AI LIFE está leyendo su respuesta.";
- };
- stopButton.onclick=()=>{
-  window.speechSynthesis.cancel();
-  voiceStatus.textContent="Lectura detenida.";
- };
-}else{
- speakButton.disabled=true;
- stopButton.disabled=true;
- voiceStatus.textContent="La lectura de voz no está disponible.";
-}
-
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-
-if(SpeechRecognition){
- recognition=new SpeechRecognition();
- recognition.lang="es-CO";
- recognition.continuous=false;
- recognition.interimResults=false;
- micButton.onclick=()=>{
-  if(listening)return;
-  try{
-   recognition.start();
-   listening=true;
-   voiceStatus.textContent="Te estoy escuchando...";
-  }catch(error){
-   voiceStatus.textContent="No se pudo iniciar el micrófono. Inténtalo nuevamente.";
-  }
- };
- recognition.onresult=event=>{
-  chatInput.value=event.results[0][0].transcript;
-  voiceStatus.textContent="Consulta reconocida. Pulsa Enviar consulta.";
- };
- recognition.onerror=()=>{
-  voiceStatus.textContent="No pude reconocer tu voz. Revisa el permiso del micrófono.";
- };
- recognition.onend=()=>{
-  listening=false;
-  if(voiceStatus.textContent==="Te estoy escuchando..."){
-   voiceStatus.textContent="Puedes volver a intentarlo.";
-  }
- };
-}else{
- micButton.disabled=true;
- voiceStatus.textContent="El reconocimiento de voz no está disponible. Puedes escribir.";
-}
-
-/* TAREAS */
-let tasks=[];
-try{
- tasks=JSON.parse(localStorage.getItem("ailife_tasks_v2")||"[]");
-}catch(e){tasks=[];}
-
-function saveTasks(){
- localStorage.setItem("ailife_tasks_v2",JSON.stringify(tasks));
- renderTasks();
-}
-
-function renderTasks(){
- const list=document.getElementById("tasklist");
- list.innerHTML="";
- if(!tasks.length){
-  list.textContent="Todavía no tienes tareas.";
-  list.className="muted";
-  return;
- }
- list.className="";
- tasks.forEach((t,i)=>{
-  const row=document.createElement("div");
-  row.className="task";
-  const cb=document.createElement("input");
-  cb.type="checkbox";
-  cb.checked=t.done;
-  cb.onchange=()=>{
-   tasks[i].done=cb.checked;
-   saveTasks();
-  };
-  const info=document.createElement("span");
-  info.textContent=t.text;
-  const details=document.createElement("small");
-  details.textContent="Prioridad: "+t.priority+(t.date?" · Fecha: "+t.date:"");
-  info.appendChild(details);
-  if(t.done)info.style.textDecoration="line-through";
-  const del=document.createElement("button");
-  del.className="delete";
-  del.textContent="×";
-  del.setAttribute("aria-label","Eliminar tarea");
-  del.onclick=()=>{
-   tasks.splice(i,1);
-   saveTasks();
-  };
-  row.append(cb,info,del);
-  list.appendChild(row);
- });
-}
-
-document.getElementById("addtask").onclick=()=>{
- const el=document.getElementById("taskinput");
- const value=el.value.trim();
- if(!value)return;
- tasks.push({
-  text:value,
-  date:document.getElementById("taskdate").value,
-  priority:document.getElementById("taskpriority").value,
-  done:false
- });
- el.value="";
- document.getElementById("taskdate").value="";
- saveTasks();
-};
-document.getElementById("taskinput").addEventListener("keydown",e=>{
- if(e.key==="Enter")document.getElementById("addtask").click();
-});
-renderTasks();
-
-/* CREADOR DE TEXTOS */
-document.getElementById("maketext").onclick=()=>{
- const purpose=document.getElementById("textpurpose").value.trim();
- const tone=document.getElementById("texttone").value;
- if(!purpose){
-  alert("Escribe primero qué necesitas comunicar.");
-  return;
- }
- let opening="Buen día.";
- if(tone==="Formal")opening="Cordial saludo.";
- if(tone==="Cercano")opening="¡Hola! Espero que estés muy bien.";
- if(tone==="Breve y directo")opening="Hola.";
- document.getElementById("textresult").value=
- opening+"\n\nMe comunico para "+purpose+". Agradecería mucho tu orientación o respuesta cuando te sea posible.\n\nMuchas gracias por tu tiempo.\nSaludos.";
-};
-
-document.getElementById("copytext").onclick=async()=>{
- const value=document.getElementById("textresult").value;
- if(!value)return;
- try{
-  await navigator.clipboard.writeText(value);
-  alert("Texto copiado correctamente.");
- }catch(e){
-  alert("Selecciona el texto y cópialo manualmente.");
- }
-};
-
-/* CONTENIDO DE AI LIFE ACADEMIA */
-const academyData=[
- {
-  id:"ia",name:"Inteligencia artificial",icon:"🤖",
-  description:"Conoce la IA, aprende a utilizarla y descubre sus posibilidades.",
-  lessons:[
-   {
-    id:"ia1",title:"¿Qué es la inteligencia artificial?",
-    content:`La inteligencia artificial (IA) es una tecnología que permite que los sistemas informáticos realicen tareas que normalmente requieren capacidades humanas.
-
-Por ejemplo, puede ayudar a reconocer imágenes, comprender preguntas, traducir idiomas y generar textos.
-
-¿Dónde la encontramos?
-• En asistentes virtuales.
-• En recomendaciones de películas y música.
-• En herramientas de traducción.
-• En aplicaciones que reconocen fotografías.
-
-IDEA CLAVE:
-La IA es una herramienta que puede ayudarnos a trabajar y aprender, pero sus respuestas siempre deben revisarse.`,
-    question:"¿Cuál es un ejemplo de uso de inteligencia artificial?",
-    options:["Una recomendación personalizada de películas","Una silla de madera","Un cuaderno de papel"],
-    answer:0,
-    explanation:"Las recomendaciones personalizadas pueden utilizar sistemas de IA para analizar preferencias."
-   },
-   {
-    id:"ia2",title:"¿Qué es un prompt?",
-    content:`Un prompt es la instrucción o pregunta que escribimos para pedirle algo a una herramienta de inteligencia artificial.
-
-Un buen prompt explica qué necesitamos y ofrece suficiente contexto.
-
-Ejemplo sencillo:
-En lugar de escribir: "Hazme un texto".
-
-Podemos escribir: "Redacta un mensaje amable para solicitar información sobre un curso".
-
-Consejos:
-• Explica tu objetivo.
-• Incluye los detalles importantes.
-• Indica el formato que deseas.
-• Revisa el resultado.`,
-    question:"¿Qué es un prompt?",
-    options:["Una instrucción para la IA","Un tipo de computadora","Una contraseña de internet"],
-    answer:0,
-    explanation:"Un prompt es la instrucción que orienta a la herramienta sobre lo que necesitamos."
-   },
-   {
-    id:"ia3",title:"Cómo utilizar la IA responsablemente",
-    content:`La inteligencia artificial puede ser muy útil, pero debemos utilizarla con criterio.
-
-Buenas prácticas:
-• Comprueba los datos importantes.
-• No compartas contraseñas ni información privada.
-• Consulta fuentes confiables.
-• No aceptes una respuesta sin analizarla.
-• Utiliza la IA como apoyo para aprender y crear.
-
-Recuerda:
-La tecnología ayuda, pero las decisiones importantes necesitan criterio humano.`,
-    question:"¿Qué debemos hacer con una respuesta importante de la IA?",
-    options:["Creerla sin revisarla","Comprobarla con fuentes confiables","Compartirla inmediatamente"],
-    answer:1,
-    explanation:"La IA puede equivocarse. Por eso conviene comprobar la información importante."
-   }
-  ]
- },
- {
-  id:"finanzas",name:"Finanzas personales",icon:"💰",
-  description:"Aprende a organizar gastos, planificar y comprender el ahorro.",
-  lessons:[
-   {
-    id:"fin1",title:"¿Qué son las finanzas personales?",
-    content:`Las finanzas personales son la manera en que organizamos el dinero que recibimos y utilizamos.
-
-Incluyen:
-• Ingresos: dinero que recibimos.
-• Gastos: dinero que utilizamos.
-• Ahorro: dinero que reservamos para el futuro.
-• Planificación: decisiones para organizar nuestros recursos.
-
-Un buen comienzo es conocer cuánto dinero entra y cuánto sale.`,
-    question:"¿Qué significa ahorrar?",
-    options:["Gastar todo el dinero","Reservar una parte para el futuro","Pedir dinero prestado"],
-    answer:1,
-    explanation:"Ahorrar significa reservar dinero para una necesidad o meta futura."
-   },
-   {
-    id:"fin2",title:"Cómo organizar un presupuesto",
-    content:`Un presupuesto es un plan para organizar los ingresos y los gastos.
-
-Pasos para comenzar:
-1. Anota los ingresos.
-2. Registra los gastos.
-3. Identifica los gastos necesarios.
-4. Establece metas de ahorro.
-5. Revisa el presupuesto periódicamente.
-
-Un presupuesto permite conocer mejor nuestras decisiones económicas.`,
-    question:"¿Para qué sirve un presupuesto?",
-    options:["Para organizar ingresos y gastos","Para eliminar todos los gastos","Para aumentar automáticamente los ingresos"],
-    answer:0,
-    explanation:"El presupuesto ayuda a planificar cómo utilizamos el dinero."
-   }
-  ]
- },
- {
-  id:"productividad",name:"Productividad",icon:"📅",
-  description:"Organiza tu tiempo, establece objetivos y avanza paso a paso.",
-  lessons:[
-   {
-    id:"prod1",title:"Cómo organizar tu día",
-    content:`Organizar el día permite utilizar mejor el tiempo y recordar las actividades importantes.
-
-Prueba este método:
-1. Escribe tus pendientes.
-2. Identifica cuáles son importantes.
-3. Establece un orden.
-4. Reserva tiempo para cada actividad.
-5. Revisa lo que lograste.
-
-Consejo:
-No intentes hacerlo todo al mismo tiempo. Concéntrate en una actividad y avanza paso a paso.`,
-    question:"¿Qué conviene hacer antes de comenzar una jornada organizada?",
-    options:["Escribir y revisar los pendientes","Hacer todas las tareas al mismo tiempo","Olvidar las prioridades"],
-    answer:0,
-    explanation:"Anotar los pendientes permite visualizar las actividades y establecer prioridades."
-   },
-   {
-    id:"prod2",title:"Cómo establecer objetivos",
-    content:`Un objetivo es un resultado que queremos alcanzar.
-
-Para definirlo mejor:
-• Sé claro sobre lo que quieres lograr.
-• Establece un plazo razonable.
-• Divide el objetivo en acciones pequeñas.
-• Revisa tus avances.
-• Ajusta el plan cuando sea necesario.
-
-Un objetivo claro facilita saber cuál es el siguiente paso.`,
-    question:"¿Qué ayuda a alcanzar un objetivo grande?",
-    options:["Dividirlo en acciones pequeñas","No establecer ningún plan","Esperar sin actuar"],
-    answer:0,
-    explanation:"Dividir un objetivo en acciones pequeñas facilita comenzar y revisar los avances."
-   }
-  ]
- },
- {
-  id:"cultura",name:"Cultura general",icon:"🌎",
-  description:"Explora ciencia, historia, naturaleza y curiosidades del mundo.",
-  lessons:[
-   {
-    id:"cult1",title:"¿Por qué es importante la ciencia?",
-    content:`La ciencia es una forma organizada de investigar y comprender el mundo.
-
-Los científicos observan fenómenos, hacen preguntas, proponen explicaciones y realizan investigaciones para comprobarlas.
-
-La ciencia nos ayuda a:
-• Comprender la naturaleza.
-• Desarrollar tecnologías.
-• Investigar enfermedades.
-• Estudiar el universo.
-• Resolver problemas.
-
-La curiosidad es uno de los motores del conocimiento.`,
-    question:"¿Qué busca hacer la ciencia?",
-    options:["Investigar y comprender el mundo","Evitar hacer preguntas","Aceptar cualquier idea sin comprobarla"],
-    answer:0,
-    explanation:"La ciencia utiliza observaciones e investigaciones para construir conocimientos."
-   },
-   {
-    id:"cult2",title:"Nuestro planeta Tierra",
-    content:`La Tierra es el planeta donde vivimos. Tiene océanos, continentes, una atmósfera y una gran diversidad de seres vivos.
-
-Algunos datos:
-• La Tierra gira sobre su propio eje.
-• También se mueve alrededor del Sol.
-• La mayor parte de su superficie está cubierta por agua.
-• Su atmósfera ayuda a proteger la vida.
-
-Cuidar el planeta es una responsabilidad compartida.`,
-    question:"¿Alrededor de qué estrella gira la Tierra?",
-    options:["La Luna","El Sol","Marte"],
-    answer:1,
-    explanation:"La Tierra realiza su movimiento de traslación alrededor del Sol."
-   }
-  ]
- }
+const $=id=>document.getElementById(id);
+function startApp(){$('splash').classList.add('hidden');$('app').classList.remove('hidden');show('home');renderTasks();renderAcademy()}
+function show(id){document.querySelectorAll('#app>section').forEach(s=>s.classList.add('hidden'));$(id).classList.remove('hidden');if(id==='tasks')renderTasks();if(id==='learn')renderAcademy();if(id==='home')updateHome()}
+function updateHome(){let p=getProfile();$('homeProgress').textContent=`${p.points} puntos · ${p.done.length} lecciones completadas`;}
+function getProfileName(){return localStorage.getItem('ailife_profile')||'jóvenes'}
+function setProfileName(v){localStorage.setItem('ailife_profile',v)}
+function getAllProfiles(){try{return JSON.parse(localStorage.getItem('ailife_profiles')||'{}')}catch(e){return {}}}
+function saveAllProfiles(a){localStorage.setItem('ailife_profiles',JSON.stringify(a))}
+function getProfile(){let a=getAllProfiles(),n=getProfileName();if(!a[n])a[n]={points:0,done:[],daily:{},lastDay:'',streak:0};return a[n]}
+function saveProfile(p){let a=getAllProfiles();a[getProfileName()]=p;saveAllProfiles(a)}
+function changeProfile(){setProfileName($('profileSelect').value);$('profileTitle').textContent='Perfil: '+$('profileSelect').value;renderAcademy()}
+const lessons=[
+{cat:'Inteligencia artificial',icon:'🤖',items:[
+{title:'¿Qué es la inteligencia artificial?',body:'La inteligencia artificial (IA) es una tecnología que permite que una computadora realice tareas que normalmente necesitan capacidades humanas, como reconocer imágenes, comprender texto o encontrar patrones. No piensa ni siente como una persona: procesa información siguiendo modelos y reglas.',q:'¿Cuál es un ejemplo de uso de IA?',opts:['Reconocer voz en un asistente','Una silla común','Un lápiz'],a:0,why:'Los asistentes pueden usar IA para interpretar lo que decimos.'},
+{title:'Cómo hacer buenas preguntas a una IA',body:'Una buena instrucción explica qué necesitas, para quién es y cómo quieres la respuesta. Por ejemplo: “Explícame la fotosíntesis para un estudiante de secundaria, con un ejemplo”.',q:'¿Qué hace más clara una instrucción?',opts:['Dar contexto y objetivo','Escribir palabras al azar','No explicar lo que necesitas'],a:0,why:'El contexto ayuda a orientar la respuesta.'},
+{title:'Usar la IA con responsabilidad',body:'La IA puede equivocarse. Compara datos importantes con fuentes confiables, protege tu información personal y úsala como apoyo para aprender, no para reemplazar tu propio criterio.',q:'¿Qué debes hacer con un dato importante que entrega una IA?',opts:['Creerlo siempre','Verificarlo en fuentes confiables','Compartirlo sin revisar'],a:1,why:'La verificación ayuda a detectar errores.'}]},
+{cat:'Finanzas personales',icon:'💰',items:[
+{title:'Necesidades y deseos',body:'Una necesidad es algo importante para vivir o estudiar, como alimentación o transporte. Un deseo es algo que te gustaría tener, pero que puede esperar. Distinguirlos ayuda a tomar decisiones.',q:'¿Cuál suele ser una necesidad?',opts:['Alimentación','Un videojuego nuevo','Un accesorio de moda'],a:0,why:'La alimentación es esencial.'},
+{title:'Crear un presupuesto',body:'Un presupuesto es un plan para organizar el dinero que recibes y gastas. Anota ingresos, gastos necesarios, otros gastos y una meta de ahorro. Revísalo con frecuencia.',q:'¿Para qué sirve un presupuesto?',opts:['Para organizar ingresos y gastos','Para gastar sin pensar','Para evitar revisar el dinero'],a:0,why:'Un presupuesto permite planear y decidir.'},
+{title:'El hábito del ahorro',body:'Ahorrar consiste en reservar una parte del dinero para una meta o imprevisto. Una meta clara, un plazo y un registro sencillo pueden ayudar a mantener el hábito.',q:'¿Qué ayuda a ahorrar?',opts:['Tener una meta','No llevar cuentas','Comprar primero todo lo que quieras'],a:0,why:'Una meta concreta da dirección al ahorro.'}]},
+{cat:'Productividad',icon:'⚡',items:[
+{title:'Priorizar tareas',body:'No todas las tareas tienen la misma importancia o urgencia. Identifica lo que debe hacerse primero, divide los trabajos grandes en pasos pequeños y empieza por una acción concreta.',q:'¿Qué conviene hacer primero?',opts:['Una tarea urgente e importante','La más fácil aunque no importe','Todas al mismo tiempo'],a:0,why:'Priorizar evita perder de vista lo esencial.'},
+{title:'Técnica de enfoque',body:'Trabaja durante un periodo corto con atención en una sola tarea y luego toma una pausa breve. Ajusta los tiempos a tu edad, actividad y necesidades.',q:'¿Qué ayuda a concentrarse?',opts:['Hacer varias cosas a la vez','Reducir distracciones','Revisar notificaciones constantemente'],a:1,why:'Menos distracciones facilitan mantener el enfoque.'},
+{title:'Convertir metas en pasos',body:'Una meta grande se vuelve más manejable cuando la divides en acciones pequeñas, medibles y con fechas realistas. Revisa el avance y ajusta el plan si hace falta.',q:'¿Qué vuelve una meta más manejable?',opts:['Dividirla en pasos','Dejarla sin plan','Esperar al último día'],a:0,why:'Los pasos concretos permiten avanzar y medir resultados.'}]},
+{cat:'Ciencia y cultura general',icon:'🌎',items:[
+{title:'El sistema solar',body:'El sistema solar está formado por el Sol y los cuerpos que orbitan a su alrededor, como planetas, planetas enanos, lunas, asteroides y cometas. La Tierra es uno de sus ocho planetas.',q:'¿Cuál es la estrella del sistema solar?',opts:['La Luna','El Sol','Marte'],a:1,why:'El Sol es la estrella central del sistema solar.'},
+{title:'El agua en la Tierra',body:'El agua circula mediante el ciclo del agua: se evapora, se condensa en nubes y cae como precipitación. Después puede fluir por ríos, infiltrarse en el suelo o volver a evaporarse.',q:'¿Cómo se llama el proceso por el que el agua líquida pasa a vapor?',opts:['Evaporación','Congelación','Condensación'],a:0,why:'La evaporación transforma agua líquida en vapor.'},
+{title:'Pensamiento crítico',body:'Pensar críticamente significa analizar información, preguntar por las pruebas, comparar perspectivas y reconocer cuándo no sabemos algo. Es útil antes de compartir noticias o tomar decisiones.',q:'¿Qué es una buena práctica al leer una noticia?',opts:['Revisar la fuente y las pruebas','Compartir solo el titular','Aceptar todo sin preguntar'],a:0,why:'La fuente y las pruebas permiten evaluar la información.'}]},
+{cat:'Matemáticas y tecnología',icon:'🧮',items:[
+{title:'Porcentajes en la vida diaria',body:'Un porcentaje representa una parte de cien. Por ejemplo, 25% significa 25 de cada 100. Los porcentajes aparecen en descuentos, encuestas y estadísticas.',q:'¿Qué significa 50%?',opts:['La mitad','El doble','Una décima parte'],a:0,why:'50 de cada 100 equivale a la mitad.'},
+{title:'Datos y privacidad',body:'Los datos personales pueden identificarte o describir aspectos de tu vida. Comparte solo lo necesario, usa contraseñas únicas y consulta a un adulto de confianza si algo en línea te parece sospechoso.',q:'¿Qué conviene hacer con una contraseña?',opts:['Compartirla públicamente','Mantenerla privada','Usar la misma en todos lados'],a:1,why:'Una contraseña debe mantenerse privada y ser difícil de adivinar.'}]}
 ];
-
-/* PROGRESO DE APRENDIZAJE */
-let completedLessons=[];
-try{
- completedLessons=JSON.parse(localStorage.getItem("ailife_academy_progress")||"[]");
- if(!Array.isArray(completedLessons))completedLessons=[];
-}catch(e){completedLessons=[];}
-
-function saveProgress(){
- localStorage.setItem("ailife_academy_progress",JSON.stringify(completedLessons));
- updateProgress();
-}
-
-function updateProgress(){
- const total=academyData.reduce((sum,c)=>sum+c.lessons.length,0);
- const done=completedLessons.length;
- document.getElementById("progressText").textContent=
- "Tu progreso: "+done+" de "+total+" lecciones completadas";
- document.getElementById("progressBar").style.width=
- (total?Math.min(100,done/total*100):0)+"%";
-}
-
-/* NAVEGACIÓN DE LA ACADEMIA */
-const academyHome=document.getElementById("academyHome");
-const categoryView=document.getElementById("categoryView");
-const lessonView=document.getElementById("lessonView");
-const quizView=document.getElementById("quizView");
-
-let currentCategory=null;
-let currentLesson=null;
-let selectedOption=null;
-let answered=false;
-let quizScore=0;
-let quizIndex=0;
-
-function academyScreen(screen){
- academyHome.classList.toggle("hidden",screen!=="home");
- categoryView.classList.toggle("hidden",screen!=="category");
- lessonView.classList.toggle("hidden",screen!=="lesson");
- quizView.classList.toggle("hidden",screen!=="quiz");
- window.scrollTo(0,0);
-}
-
-function renderCategories(){
- const grid=document.getElementById("categoryGrid");
- grid.innerHTML="";
- academyData.forEach(category=>{
-  const done=category.lessons.filter(l=>completedLessons.includes(l.id)).length;
-  const card=document.createElement("button");
-  card.className="category-card";
-  const icon=document.createElement("div");
-  icon.className="category-icon";
-  icon.textContent=category.icon;
-  const name=document.createElement("b");
-  name.textContent=category.name;
-  const desc=document.createElement("small");
-  desc.textContent=category.lessons.length+" lecciones · "+done+" completadas";
-  card.append(icon,name,desc);
-  card.onclick=()=>openCategory(category.id);
-  grid.appendChild(card);
- });
-}
-
-function openCategory(id){
- currentCategory=academyData.find(c=>c.id===id);
- if(!currentCategory)return;
- document.getElementById("categoryTitle").textContent=
- currentCategory.icon+" "+currentCategory.name;
- document.getElementById("categoryDescription").textContent=
- currentCategory.description;
- const list=document.getElementById("lessonList");
- list.innerHTML="";
- currentCategory.lessons.forEach((lesson,index)=>{
-  const card=document.createElement("button");
-  card.className="lesson-card";
-  const title=document.createElement("b");
-  title.textContent=(completedLessons.includes(lesson.id)?"✓ ":"📘 ")+(index+1)+". "+lesson.title;
-  const detail=document.createElement("small");
-  detail.textContent=completedLessons.includes(lesson.id)?"Lección completada · Repasar":"Leer la lección y realizar el cuestionario";
-  card.append(title,detail);
-  card.onclick=()=>openLesson(lesson.id);
-  list.appendChild(card);
- });
- academyScreen("category");
-}
-
-function openLesson(id){
- currentLesson=currentCategory.lessons.find(l=>l.id===id);
- if(!currentLesson)return;
- document.getElementById("lessonTitle").textContent=currentLesson.title;
- document.getElementById("lessonContent").textContent=currentLesson.content;
- document.getElementById("lessonCompletedMessage").textContent=
- completedLessons.includes(id)?"✓ Ya completaste esta lección. Puedes repasarla cuando quieras.":"Al terminar, realiza el cuestionario para registrar tu avance.";
- academyScreen("lesson");
-}
-
-document.getElementById("backCategories").onclick=()=>{
- renderCategories();
- academyScreen("home");
-};
-document.getElementById("backLessons").onclick=()=>{
- openCategory(currentCategory.id);
-};
-document.getElementById("backLesson").onclick=()=>{
- academyScreen("lesson");
-};
-
-document.getElementById("startQuiz").onclick=()=>{
- quizIndex=0;
- quizScore=0;
- showQuizQuestion();
- academyScreen("quiz");
-};
-
-/* CUESTIONARIO */
-function showQuizQuestion(){
- const q=currentLesson;
- selectedOption=null;
- answered=false;
- document.getElementById("quizTitle").textContent=q.title;
- document.getElementById("quizCounter").textContent="Pregunta 1 de 1";
- document.getElementById("quizQuestion").textContent=q.question;
- document.getElementById("quizFeedback").classList.add("hidden");
- document.getElementById("quizFinal").classList.add("hidden");
- document.getElementById("checkAnswer").classList.remove("hidden");
- document.getElementById("nextQuestion").classList.add("hidden");
-
- const options=document.getElementById("quizOptions");
- options.innerHTML="";
- q.options.forEach((option,index)=>{
-  const button=document.createElement("button");
-  button.className="quiz-option";
-  button.textContent=String.fromCharCode(65+index)+". "+option;
-  button.onclick=()=>{
-   if(answered)return;
-   selectedOption=index;
-   options.querySelectorAll("button").forEach(b=>b.classList.remove("selected"));
-   button.classList.add("selected");
-  };
-  options.appendChild(button);
- });
-}
-
-document.getElementById("checkAnswer").onclick=()=>{
- if(selectedOption===null){
-  alert("Selecciona una respuesta primero.");
-  return;
- }
- if(answered)return;
- answered=true;
- const correct=selectedOption===currentLesson.answer;
- if(correct)quizScore=1;
-
- const buttons=document.querySelectorAll("#quizOptions button");
- buttons.forEach((b,i)=>{
-  b.disabled=true;
-  if(i===currentLesson.answer)b.classList.add("correct");
-  else if(i===selectedOption)b.classList.add("wrong");
- });
-
- const feedback=document.getElementById("quizFeedback");
- feedback.textContent=(correct?"¡Muy bien! Respuesta correcta. ":"Esta vez no fue correcta. ")+currentLesson.explanation;
- feedback.classList.remove("hidden");
- document.getElementById("checkAnswer").classList.add("hidden");
- document.getElementById("nextQuestion").classList.remove("hidden");
-};
-
-document.getElementById("nextQuestion").onclick=()=>{
- if(quizScore===1 && !completedLessons.includes(currentLesson.id)){
-  completedLessons.push(currentLesson.id);
-  saveProgress();
- }
- document.getElementById("quizOptions").innerHTML="";
- document.getElementById("quizQuestion").textContent="";
- document.getElementById("quizCounter").textContent="";
- document.getElementById("quizFeedback").classList.add("hidden");
- document.getElementById("checkAnswer").classList.add("hidden");
- document.getElementById("nextQuestion").classList.add("hidden");
- document.getElementById("quizFinal").classList.remove("hidden");
- document.getElementById("quizResult").textContent=
- quizScore===1?"¡Excelente! 🎉":"¡Buen intento! Sigue aprendiendo.";
- document.getElementById("quizResultText").textContent=
- quizScore===1?"Has respondido correctamente y tu lección quedó registrada.":"Puedes volver a leer la lección y repetir el cuestionario cuando quieras.";
-};
-
-document.getElementById("finishQuiz").onclick=()=>{
- renderCategories();
- openCategory(currentCategory.id);
-};
-
-/* EXPLÍCAMELO FÁCIL */
-function explainTopic(topic){
- const t=topic.toLowerCase();
-
- if(/internet|wifi|wi-fi/.test(t)){
-  return "Internet es una gran red que conecta computadores, celulares y otros dispositivos en todo el mundo. Gracias a esa conexión podemos visitar páginas, enviar mensajes y consultar información. Es parecido a una red de carreteras por donde viajan los datos.";
- }
- if(/computador|ordenador/.test(t)){
-  return "Un computador es una máquina electrónica que recibe información, la procesa y produce resultados. Por ejemplo, cuando escribes un documento, el computador recibe tus instrucciones y las convierte en un archivo.";
- }
- if(/ahorro|ahorrar|presupuesto/.test(t)){
-  return "Ahorrar significa reservar una parte del dinero para utilizarla más adelante. Un presupuesto es un plan que ayuda a organizar cuánto dinero recibimos y cuánto gastamos. Ambos sirven para tomar decisiones económicas con más orden.";
- }
- if(/inteligencia artificial|\\bia\\b/.test(t)){
-  return "La inteligencia artificial es una tecnología que permite a los computadores realizar tareas como reconocer imágenes, comprender preguntas o generar textos. Es como una herramienta digital que analiza información para ayudarnos con diferentes actividades.";
- }
- if(/planeta|tierra|universo|espacio/.test(t)){
-  return "El universo contiene galaxias, estrellas, planetas y muchos otros objetos. La Tierra es nuestro planeta y forma parte del sistema solar, donde el Sol es la estrella central. La ciencia estudia estos elementos para comprender cómo funciona el cosmos.";
- }
- if(/historia/.test(t)){
-  return "La historia estudia los acontecimientos y las sociedades del pasado. Nos ayuda a comprender cómo vivían las personas, cómo cambiaron las culturas y cómo llegamos al mundo actual.";
- }
- if(/productividad|organizar|tiempo/.test(t)){
-  return "La productividad consiste en utilizar nuestros recursos, especialmente el tiempo y la energía, para avanzar en lo que queremos lograr. Una buena forma de comenzar es escribir los pendientes, elegir prioridades y dividir las actividades grandes en pasos pequeños.";
- }
- return "Podemos entender \""+topic+"\" como un tema que merece explorarse paso a paso. Para aprenderlo, primero identifica su idea principal, después busca un ejemplo cotidiano y finalmente intenta explicarlo con tus propias palabras. Así podrás comprobar qué has comprendido y qué necesitas investigar un poco más.";
-}
-
-document.getElementById("explainButton").onclick=()=>{
- const input=document.getElementById("explainInput");
- const topic=input.value.trim();
- if(!topic){
-  alert("Escribe el tema que quieres aprender.");
-  return;
- }
- const result=document.getElementById("explainResult");
- result.textContent=explainTopic(topic);
- result.classList.remove("hidden");
-};
-
-/* INICIO DE ACADEMIA */
-renderCategories();
-updateProgress();
-academyScreen("home");
-
-/* SERVICE WORKER */
-if("serviceWorker" in navigator){
- window.addEventListener("load",()=>{
-  navigator.serviceWorker.register("./sw.js").catch(()=>{});
- });
-}
+function renderAcademy(){let p=getProfile();$('profileSelect').value=getProfileName();$('profileTitle').textContent='Perfil: '+getProfileName();$('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;$('progressBar').style.width=Math.min(100,p.done.length/lessons.reduce((n,c)=>n+c.items.length,0)*100)+'%';$('badges').innerHTML=(p.points>=50?'<span class="pill">🏅 Primer reto</span>':'')+(p.done.length>=5?'<span class="pill">📘 Curioso</span>':'')+(p.done.length>=10?'<span class="pill">🌟 Explorador</span>':'');let today=new Date().toISOString().slice(0,10);$('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';$('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];$('categories').innerHTML=lessons.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} lecciones</span></div><div id="cat${i}"></div></div>`).join('');lessons.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>`<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(i+'-'+j)?'✓ ':''}${l.title}</button>`).join('')});updateHome()}
+function openLesson(i,j){let l=lessons[i].items[j];$('lessonArea').classList.remove('hidden');$('lessonArea').innerHTML=`<div class="row"><h2>${l.title}</h2><button class="back" onclick="$('lessonArea').classList.add('hidden')">Cerrar ✕</button></div><p class="muted">${l.body}</p><hr style="border-color:#29405f"><b>${l.q}</b><div id="lessonChoices"></div><p id="lessonFeedback" class="muted"></p>`;$('lessonChoices').innerHTML=l.opts.map((o,k)=>`<button class="choice" onclick="answerLesson(${i},${j},${k})">${String.fromCharCode(65+k)}. ${o}</button>`).join('');$('lessonArea').scrollIntoView({behavior:'smooth',block:'start'})}
+function answerLesson(i,j,k){let l=lessons[i].items[j],p=getProfile(),key=i+'-'+j,buttons=$('lessonChoices').querySelectorAll('button');buttons.forEach((b,n)=>{b.disabled=true;if(n===l.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});if(k===l.a&&!p.done.includes(key)){p.done.push(key);p.points+=10;saveProfile(p);$('lessonFeedback').textContent='¡Correcto! +10 puntos. '+l.why}else if(k===l.a){$('lessonFeedback').textContent='¡Correcto! Ya habías completado esta lección. '+l.why}else{$('lessonFeedback').textContent='No pasa nada. La respuesta correcta está marcada. '+l.why}renderAcademy()}
+const dailyBank=[
+{q:'¿Qué planeta habitamos?',o:['Venus','Tierra','Júpiter'],a:1},
+{q:'¿Cuántos lados tiene un triángulo?',o:['Tres','Cuatro','Cinco'],a:0},
+{q:'¿Qué órgano usamos principalmente para respirar?',o:['Pulmones','Estómago','Riñones'],a:0},
+{q:'¿Qué significa ahorrar?',o:['Gastar todo','Reservar parte del dinero','Pedir prestado siempre'],a:1},
+{q:'¿Qué debemos revisar en una noticia?',o:['Solo el título','La fuente y las pruebas','Los comentarios solamente'],a:1},
+{q:'¿Qué gas necesitan las plantas para la fotosíntesis?',o:['Oxígeno','Dióxido de carbono','Helio'],a:1},
+{q:'¿Cuánto es 8 × 7?',o:['54','56','64'],a:1},
+{q:'¿Cuál es el satélite natural de la Tierra?',o:['La Luna','El Sol','Marte'],a:0},
+{q:'¿Qué ayuda a proteger una cuenta?',o:['Contraseña privada y segura','Publicar la clave','Usar 1234'],a:0},
+{q:'¿Qué es una meta?',o:['Un objetivo que buscamos alcanzar','Una distracción','Un gasto obligatorio'],a:0}
+];
+let dailyIndex=0,dailyScore=0,dailySet=[];
+function startDaily(){let p=getProfile(),date=new Date().toISOString().slice(0,10);if(p.daily[date])return;let seed=Number(date.replaceAll('-',''));dailySet=Array.from({length:5},(_,i)=>dailyBank[(seed+i*3)%dailyBank.length]);dailyIndex=0;dailyScore=0;$('dailyQuiz').classList.remove('hidden');$('dailyButton').classList.add('hidden');showDailyQuestion()}
+function showDailyQuestion(){if(dailyIndex>=5){let p=getProfile(),date=new Date().toISOString().slice(0,10);if(dailyScore===5){p.daily[date]=true;p.points+=50;let yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);p.streak=p.lastDay===yesterday?p.streak+1:1;p.lastDay=date;saveProfile(p);$('dailyQuiz').innerHTML='<h3>¡Excelente! 🎉</h3><p>Respondiste las cinco preguntas correctamente y ganaste 50 puntos.</p>'}else{$('dailyQuiz').innerHTML=`<h3>Reto terminado</h3><p>Tu resultado: ${dailyScore} de 5. Para ganar los 50 puntos necesitas responder las cinco correctamente. Puedes volver a intentarlo mañana.</p>`}renderAcademy();return}let q=dailySet[dailyIndex];$('dailyQuiz').innerHTML=`<p class="pill">Pregunta ${dailyIndex+1} de 5</p><h3>${q.q}</h3>${q.o.map((o,k)=>`<button class="choice" onclick="answerDaily(${k})">${o}</button>`).join('')}`}
+function answerDaily(k){let q=dailySet[dailyIndex],bs=$('dailyQuiz').querySelectorAll('button');bs.forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});if(k===q.a)dailyScore++;setTimeout(()=>{dailyIndex++;showDailyQuestion()},650)}
+function explainTopic(){let t=$('explainInput').value.trim().toLowerCase();if(!t){$('explainOutput').textContent='Escribe primero un tema.';return}let answer='Puedo ayudarte a entenderlo. Piensa en el tema como una idea que podemos dividir en partes pequeñas. Busca qué significa, para qué sirve y un ejemplo de la vida diaria.';if(t.includes('ia')||t.includes('inteligencia'))answer='La inteligencia artificial es una tecnología que ayuda a las computadoras a reconocer patrones y realizar tareas, como comprender preguntas o identificar imágenes. Es una herramienta: puede equivocarse y debemos revisar sus respuestas.';else if(t.includes('porcentaje'))answer='Un porcentaje es una forma de expresar una parte de cada cien. Si tienes 100 elementos y tomas 20, tomaste el 20%.';else if(t.includes('presupuesto')||t.includes('dinero'))answer='Un presupuesto es un plan para decidir cómo usar el dinero: cuánto recibes, cuánto necesitas gastar y cuánto puedes reservar para una meta.';else if(t.includes('fotosíntesis'))answer='La fotosíntesis es el proceso por el que las plantas usan luz, agua y dióxido de carbono para producir su alimento y liberar oxígeno.';$('explainOutput').textContent=answer}
+function addTask(){let v=$('taskInput').value.trim();if(!v)return;let a=JSON.parse(localStorage.getItem('ailife_tasks_v2')||'[]');a.push({text:v,done:false});localStorage.setItem('ailife_tasks_v2',JSON.stringify(a));$('taskInput').value='';renderTasks()}
+function renderTasks(){let a=JSON.parse(localStorage.getItem('ailife_tasks_v2')||'[]');$('taskList').innerHTML=a.length?a.map((t,i)=>`<div class="task row"><label style="flex:1"><input type="checkbox" style="width:auto;margin-right:8px" ${t.done?'checked':''} onchange="toggleTask(${i})">${escapeHtml(t.text)}</label><button class="danger small" onclick="deleteTask(${i})">Eliminar</button></div>`).join(''):'<p class="muted">Todavía no tienes tareas.</p>'}
+function toggleTask(i){let a=JSON.parse(localStorage.getItem('ailife_tasks_v2')||'[]');a[i].done=!a[i].done;localStorage.setItem('ailife_tasks_v2',JSON.stringify(a));renderTasks()}
+function deleteTask(i){let a=JSON.parse(localStorage.getItem('ailife_tasks_v2')||'[]');a.splice(i,1);localStorage.setItem('ailife_tasks_v2',JSON.stringify(a));renderTasks()}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function createText(){let topic=$('textTopic').value.trim(),type=$('textType').value;if(!topic){$('textResult').value='Escribe un tema o propósito.';return}let t=type==='historia'?`Título: ${topic}\n\nHabía una vez... Todo comenzó cuando alguien decidió explorar ${topic}. Después de varios retos, aprendió algo importante y encontró una solución. Desde ese día, nunca olvidó aquella experiencia.`:type==='correo'?`Asunto: ${topic}\n\nBuen día:\n\nMe comunico para tratar el siguiente tema: ${topic}.\n\nAgradezco tu atención y quedo pendiente de tus comentarios.\n\nCordialmente,`:type==='ideas'?`Ideas sobre ${topic}:\n1. Investigar los puntos principales.\n2. Identificar a quién puede ayudar.\n3. Buscar un ejemplo práctico.\n4. Definir un primer paso.`:`Hola, quería compartir contigo lo siguiente: ${topic}. Me gustaría conocer tu opinión. ¡Muchas gracias!`;$('textResult').value=t}
+function copyText(){let t=$('textResult').value;if(navigator.clipboard&&t)navigator.clipboard.writeText(t).then(()=>alert('Texto copiado.')).catch(()=>alert('Selecciona el texto y cópialo.'))}
+let lastBot='';
+function addBubble(t,who){let d=document.createElement('div');d.className='bubble '+who;d.textContent=t;$('chatlog').appendChild(d);$('chatlog').scrollTop=$('chatlog').scrollHeight}
+function sendChat(){let q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addBubble(q,'user');let s=q.toLowerCase(),r='Puedo ayudarte a organizar esa idea. Divide el problema en pasos: define qué necesitas, reúne la información y elige una primera acción pequeña.';if(s.includes('hola'))r='¡Hola! ¿Qué te gustaría resolver hoy?';else if(s.includes('tarea')||s.includes('organizar'))r='Prueba escribir tus pendientes, elegir el más importante y dividirlo en pasos pequeños. Puedes guardarlos en la sección Mis tareas.';else if(s.includes('inteligencia artificial')||s.includes('qué es ia'))r='La inteligencia artificial es una tecnología que permite a los sistemas reconocer patrones y realizar tareas como comprender texto o identificar imágenes. Puede equivocarse, así que conviene verificar la información.';else if(s.includes('gracias'))r='¡Con gusto! Sigue aprendiendo y probando ideas.';lastBot=r;setTimeout(()=>addBubble(r,'bot'),250)}
+function speakLast(){if(lastBot&&'speechSynthesis'in window){let u=new SpeechSynthesisUtterance(lastBot);u.lang='es-CO';speechSynthesis.speak(u)}}
+function voiceInput(){let R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){alert('El dictado no está disponible en este navegador.');return}let r=new R();r.lang='es-CO';r.onresult=e=>$('chatInput').value=e.results[0][0].transcript;r.start()}
+if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
 </body>
 </html>
