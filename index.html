@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#081326">
 <meta name="description" content="AI LIFE - Tu asistente personal inteligente">
 <link rel="manifest" href="./manifest.json">
-<title>AI LIFE 3.0</title>
+<title>AI LIFE 3.1</title>
 
 <style>
 :root{
@@ -27,7 +27,6 @@ button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
 .app{max-width:850px;margin:auto;padding:20px 16px 90px}
-
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{
@@ -94,48 +93,30 @@ textarea.field{min-height:105px;resize:vertical}
 .voice-status{margin-top:10px;min-height:20px}
 footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 
-/* BIENVENIDA AI LIFE 3.0 */
+/* BIENVENIDA */
 #splash{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:24px;
-  text-align:center;
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  padding:24px;text-align:center;
   background:radial-gradient(circle at center,#123d70,#030916 75%);
   overflow:auto;
 }
 #splash img{
-  width:100%;
-  max-width:390px;
-  max-height:55vh;
-  object-fit:contain;
-  border-radius:22px;
+  width:100%;max-width:390px;max-height:55vh;
+  object-fit:contain;border-radius:22px;
   box-shadow:0 0 35px #168cff66;
 }
 #splash h1{
-  color:#72dfff;
-  font-size:35px;
-  margin:18px 0 5px;
-  letter-spacing:3px;
+  color:#72dfff;font-size:35px;
+  margin:18px 0 5px;letter-spacing:3px;
 }
-#splash p{
-  color:#c4ddff;
-  margin:5px 0 22px;
-}
+#splash p{color:#c4ddff;margin:5px 0 22px}
 #startApp{
-  width:100%;
-  max-width:280px;
-  padding:16px;
-  border:0;
-  border-radius:16px;
+  width:100%;max-width:280px;padding:16px;
+  border:0;border-radius:16px;
   background:linear-gradient(100deg,#168cff,#61e5df);
-  color:#061326;
-  font-size:17px;
-  font-weight:900;
+  color:#061326;font-size:17px;font-weight:900;
   box-shadow:0 0 25px #168cff55;
 }
 #startApp:active{transform:scale(.97)}
@@ -150,19 +131,14 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 
 <body>
 
-<!-- PANTALLA DE BIENVENIDA -->
 <div id="splash">
-  <img
-    src="https://flex1919.github.io/AI-LIFE/file_00000000ba6c81f58317195ca9a1400c.png"
-    alt="AI LIFE 3.0"
-  >
-  <h1>AI LIFE 3.0</h1>
+  <img src="https://flex1919.github.io/AI-LIFE/file_00000000ba6c81f58317195ca9a1400c.png" alt="AI LIFE 3.1">
+  <h1>AI LIFE 3.1</h1>
   <p>Inteligencia para una vida mejor</p>
   <button id="startApp">COMENZAR</button>
 </div>
 
 <div class="app">
-
 <header>
  <div class="brand">
   <div class="logo">AI</div>
@@ -171,7 +147,7 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
    <small>ASISTENTE PERSONAL INTELIGENTE</small>
   </div>
  </div>
- <div class="status">● VERSIÓN 3.0</div>
+ <div class="status">● VERSIÓN 3.1</div>
 </header>
 
 <main id="home">
@@ -182,7 +158,6 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
  </section>
 
  <h3 class="section-title">¿Qué necesitas hoy?</h3>
-
  <div class="grid">
   <button class="tile" data-open="chat">
    <span class="ico">✦</span><b>Asistente IA</b>
@@ -204,7 +179,7 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 
  <section class="panel">
   <div class="eyebrow">Tu espacio</div>
-  <h3>Bienvenido a AI LIFE 3.0</h3>
+  <h3>Bienvenido a AI LIFE 3.1</h3>
   <p class="muted">Un espacio para organizar tus ideas, avanzar en tus objetivos y resolver situaciones cotidianas.</p>
   <button class="btn" data-open="chat">Hablar con mi asistente →</button>
  </section>
@@ -213,7 +188,6 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 <!-- ASISTENTE -->
 <section id="chat" class="hidden">
  <button class="back" data-home>← Inicio</button>
-
  <div class="panel">
   <div class="eyebrow">Asistente personal</div>
   <h2>¿En qué puedo ayudarte?</h2>
@@ -237,9 +211,8 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
   </div>
 
   <p id="voicestatus" class="muted voice-status">Puedes escribir o utilizar las funciones de voz.</p>
-
-  <div class="notice">
-   Esta versión utiliza respuestas locales de demostración. Todavía no está conectada a un modelo de IA externo.
+  <div class="notice" id="connectionNotice">
+   La conexión con la IA real está pendiente de activación.
   </div>
  </div>
 </section>
@@ -247,13 +220,10 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 <!-- TAREAS -->
 <section id="tasks" class="hidden">
  <button class="back" data-home>← Inicio</button>
-
  <div class="panel">
   <div class="eyebrow">Productividad</div>
   <h2>Mis tareas</h2>
-
   <input id="taskinput" class="field" placeholder="¿Qué necesitas hacer?">
-
   <div class="actions">
    <input id="taskdate" class="field" type="date">
    <select id="taskpriority" class="field">
@@ -262,11 +232,9 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
     <option value="Baja">Prioridad baja</option>
    </select>
   </div>
-
   <div class="actions">
    <button class="btn" id="addtask">+ Agregar tarea</button>
   </div>
-
   <div id="tasklist" style="margin-top:15px"></div>
   <p class="muted">Tus tareas se guardan en este navegador.</p>
  </div>
@@ -275,14 +243,11 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 <!-- CREAR TEXTOS -->
 <section id="writer" class="hidden">
  <button class="back" data-home>← Inicio</button>
-
  <div class="panel">
   <div class="eyebrow">Comunicación inteligente</div>
   <h2>Creador de textos</h2>
-
   <label class="muted" for="textpurpose">¿Qué necesitas escribir?</label>
   <input id="textpurpose" class="field" placeholder="Ej.: solicitar información de un curso">
-
   <label class="muted" for="texttone">Selecciona el tono</label>
   <select id="texttone" class="field" style="margin-top:7px">
    <option>Amable y profesional</option>
@@ -290,13 +255,10 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
    <option>Cercano</option>
    <option>Breve y directo</option>
   </select>
-
   <div class="actions">
    <button class="btn" id="maketext">Crear borrador</button>
   </div>
-
   <textarea id="textresult" class="field" style="margin-top:13px;min-height:180px" placeholder="Tu texto aparecerá aquí..."></textarea>
-
   <div class="actions">
    <button class="btn secondary" id="copytext">Copiar texto</button>
   </div>
@@ -306,30 +268,25 @@ footer{text-align:center;color:#7185a5;font-size:11px;margin-top:30px}
 <!-- APRENDER -->
 <section id="learn" class="hidden">
  <button class="back" data-home>← Inicio</button>
-
  <div class="panel">
   <div class="eyebrow">Aprendizaje</div>
   <h2>Aprende algo nuevo</h2>
-
   <h3>¿Qué es la inteligencia artificial?</h3>
   <p class="muted">Es una tecnología que permite a los sistemas informáticos realizar tareas que normalmente requieren capacidades humanas, como reconocer patrones, comprender lenguaje o generar contenido.</p>
-
   <h3>¿Qué es un prompt?</h3>
   <p class="muted">Es una instrucción que damos a una herramienta de IA para indicarle qué necesitamos y cómo queremos recibir el resultado.</p>
-
   <h3>Un consejo</h3>
   <p class="muted">Explica tu objetivo, proporciona contexto y pide el formato de respuesta que te resulte más útil.</p>
  </div>
 </section>
 
-<footer>AI LIFE 3.0 · Tu compañero digital</footer>
+<footer>AI LIFE 3.1 · Tu compañero digital</footer>
 </div>
 
 <script>
-
-/* INICIAR APLICACIÓN */
+/* BIENVENIDA */
 document.getElementById("startApp").addEventListener("click",()=>{
-  document.getElementById("splash").classList.add("hidden");
+ document.getElementById("splash").classList.add("hidden");
 });
 
 /* NAVEGACIÓN */
@@ -350,9 +307,14 @@ document.querySelectorAll("[data-home]").forEach(b=>{
  b.addEventListener("click",()=>show("home"));
 });
 
-/* CHAT */
+/* CHAT Y CONEXIÓN */
 const log=document.getElementById("chatlog");
 const chatInput=document.getElementById("chatinput");
+const sendButton=document.getElementById("sendchat");
+const connectionNotice=document.getElementById("connectionNotice");
+
+const API_URL="https://ai-life-api.alfonso281901.workers.dev";
+let chatHistory=[];
 
 function bubble(text,who){
  const d=document.createElement("div");
@@ -380,27 +342,60 @@ function getAnswer(q){
  return "Vamos a organizarlo paso a paso.\n\n1. Define qué resultado necesitas.\n2. Identifica qué es lo más importante.\n3. Divide el problema en pequeñas acciones.\n4. Comienza por una acción sencilla.\n\nSi me das más contexto, podremos ordenar mejor tus opciones.";
 }
 
-document.getElementById("sendchat").onclick=()=>{
+sendButton.onclick=async()=>{
  const q=chatInput.value.trim();
  if(!q)return;
 
  bubble(q,"user");
  chatInput.value="";
 
- const answer=getAnswer(q);
- bubble(answer,"bot");
+ chatHistory.push({role:"user",content:q});
+ sendButton.disabled=true;
+ sendButton.textContent="Conectando...";
+
+ try{
+  const response=await fetch(API_URL,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    messages:chatHistory.slice(-12)
+   })
+  });
+
+  const data=await response.json();
+
+  if(!response.ok || typeof data.answer!=="string" || !data.answer.trim()){
+   throw new Error("Respuesta no disponible");
+  }
+
+  chatHistory.push({role:"assistant",content:data.answer});
+  bubble(data.answer,"bot");
+  connectionNotice.textContent="Conectado al servidor AI LIFE.";
+
+ }catch(error){
+  chatHistory.pop();
+  bubble(
+   "La IA real todavía no está activada. Esta es una respuesta de demostración:\n\n"+getAnswer(q),
+   "bot"
+  );
+  connectionNotice.textContent="Conexión preparada. Falta activar la clave API en Cloudflare.";
+ }finally{
+  sendButton.disabled=false;
+  sendButton.textContent="Enviar consulta";
+ }
 };
 
 chatInput.addEventListener("keydown",e=>{
  if(e.key==="Enter" && !e.shiftKey){
   e.preventDefault();
-  document.getElementById("sendchat").click();
+  sendButton.click();
  }
 });
 
 document.getElementById("clearchat").onclick=()=>{
  window.speechSynthesis?.cancel();
  log.innerHTML="";
+ chatHistory=[];
  bubble("¡Hola! Soy AI LIFE. ¿Qué situación quieres resolver hoy?","bot");
 };
 
@@ -413,15 +408,12 @@ const stopButton=document.getElementById("stopvoice");
 let recognition=null;
 let listening=false;
 
-/* LEER RESPUESTAS */
 if("speechSynthesis" in window){
  speakButton.onclick=()=>{
   const messages=log.querySelectorAll(".bot");
-
   if(!messages.length)return;
 
   const lastMessage=messages[messages.length-1].textContent;
-
   window.speechSynthesis.cancel();
 
   const speech=new SpeechSynthesisUtterance(lastMessage);
@@ -438,13 +430,11 @@ if("speechSynthesis" in window){
  };
 }else{
  speakButton.disabled=true;
- voiceStatus.textContent="La lectura de voz no está disponible en este navegador.";
  stopButton.disabled=true;
+ voiceStatus.textContent="La lectura de voz no está disponible.";
 }
 
-/* RECONOCER VOZ */
-const SpeechRecognition=
- window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 
 if(SpeechRecognition){
  recognition=new SpeechRecognition();
@@ -454,7 +444,6 @@ if(SpeechRecognition){
 
  micButton.onclick=()=>{
   if(listening)return;
-
   try{
    recognition.start();
    listening=true;
@@ -481,7 +470,7 @@ if(SpeechRecognition){
  };
 }else{
  micButton.disabled=true;
- voiceStatus.textContent="El reconocimiento de voz no está disponible en este navegador. Puedes escribir tu consulta.";
+ voiceStatus.textContent="El reconocimiento de voz no está disponible. Puedes escribir.";
 }
 
 /* TAREAS */
@@ -550,7 +539,6 @@ function renderTasks(){
 document.getElementById("addtask").onclick=()=>{
  const el=document.getElementById("taskinput");
  const value=el.value.trim();
-
  if(!value)return;
 
  tasks.push({
@@ -584,7 +572,6 @@ document.getElementById("maketext").onclick=()=>{
  }
 
  let opening="Buen día.";
-
  if(tone==="Formal")opening="Cordial saludo.";
  if(tone==="Cercano")opening="¡Hola! Espero que estés muy bien.";
  if(tone==="Breve y directo")opening="Hola.";
@@ -595,7 +582,6 @@ document.getElementById("maketext").onclick=()=>{
 
 document.getElementById("copytext").onclick=async()=>{
  const value=document.getElementById("textresult").value;
-
  if(!value)return;
 
  try{
@@ -612,7 +598,6 @@ if("serviceWorker" in navigator){
   navigator.serviceWorker.register("./sw.js").catch(()=>{});
  });
 }
-
 </script>
 </body>
 </html>
