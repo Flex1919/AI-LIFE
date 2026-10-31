@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#081326">
-<title>AI LIFE 3.3</title>
+<title>AI LIFE 3.4</title>
 <link rel="manifest" href="./manifest.json">
 <style>
 :root{--bg:#081326;--panel:#111f38;--panel2:#172944;--blue:#62b7ff;--cyan:#62e5dc;--muted:#a9bad2;--white:#f4f8ff;--line:#29405f;--gold:#ffd36e}
@@ -28,20 +28,29 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
 <section id="splash" class="splash">
  <div class="splashbox">
   <img class="heroimg" src="https://flex1919.github.io/AI-LIFE/file_00000000ba6c81f58317195ca9a1400c.png" alt="Avatar AI LIFE" onerror="this.style.display='none'">
-  <h1>AI <span style="color:#62e5dc">LIFE</span> 3.3</h1>
+  <h1>AI <span style="color:#62e5dc">LIFE</span> 3.4</h1>
   <p>Tu espacio para aprender, organizarte y crear.</p>
   <button class="primary full" onclick="startApp()">COMENZAR</button>
  </div>
 </section>
 <main id="app" class="app hidden">
-<header><div class="brand">AI <span>LIFE</span></div><div class="version">VERSIÓN 3.3</div></header>
+<header><div class="brand">AI <span>LIFE</span></div><div class="row"><button class="secondary small" onclick="show('profiles')">👤 Perfiles</button><div class="version">VERSIÓN 3.4</div></div></header>
+<section id="profiles" class="page hidden">
+ <h1>¡Bienvenidos a AI LIFE! 🌈</h1><p class="muted">Cada integrante puede tener su propio espacio, avatar y avance.</p>
+ <div class="panel"><h2>Crear perfil</h2><label>Nombre</label><input id="newProfileName" maxlength="18" placeholder="Ej. Mariana"><label>Elige un avatar</label><div class="grid" id="avatarChoices"></div><label>PIN de 4 dígitos</label><input id="newProfilePin" inputmode="numeric" maxlength="4" type="password" placeholder="Crea un PIN"><button class="primary full" onclick="createFamilyProfile()">Crear perfil</button><p class="notice">El PIN es una protección básica local, no una cuenta segura en internet. No uses una contraseña importante.</p></div>
+ <h2>Perfiles disponibles</h2><div id="profileCards"></div>
+ <button class="secondary full" onclick="show('home')">Continuar al inicio</button>
+</section>
 <section id="home">
- <h1>¡Hola! 👋</h1><p class="muted">¿Qué vamos a lograr hoy?</p>
+ <h1 id="welcomeTitle">¡Hola! 👋</h1><p class="muted">¿Qué vamos a lograr hoy?</p>
+ <div class="panel"><div class="row"><b id="activeProfileLabel">👤 Perfil activo</b><span class="pill">🪙 <span id="homeCoins">0</span> monedas</span></div><p class="muted" style="margin:8px 0 0">Completa retos y lecciones para conseguir recompensas.</p></div>
  <div class="grid">
   <button class="tile" onclick="show('chat')"><span class="emoji">🤖</span><strong>Asistente IA</strong><small>Pregunta y explora</small></button>
   <button class="tile" onclick="show('tasks')"><span class="emoji">✅</span><strong>Mis tareas</strong><small>Organiza tu día</small></button>
   <button class="tile" onclick="show('writer')"><span class="emoji">✍️</span><strong>Crear textos</strong><small>Ideas y redacción</small></button>
-  <button class="tile" onclick="show('learn')"><span class="emoji">🚀</span><strong>Aprender</strong><small>Academia Viva 3.3</small></button>
+  <button class="tile" onclick="show('learn')"><span class="emoji">🚀</span><strong>Aprender</strong><small>Academia Viva 3.4</small></button>
+  <button class="tile" onclick="show('shop')"><span class="emoji">🪙</span><strong>Tienda</strong><small>Canjea tus monedas</small></button>
+  <button class="tile" onclick="show('games')"><span class="emoji">🎮</span><strong>Juegos</strong><small>Desbloquea minijuegos</small></button>
  </div>
  <div class="panel"><div class="row"><div><h3>Tu avance de aprendizaje</h3><p class="muted" id="homeProgress">Empieza un reto y suma puntos.</p></div><span style="font-size:30px">🏆</span></div><button class="secondary small" onclick="show('learn')">Ir a Academia Viva</button></div>
 </section>
@@ -65,6 +74,17 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
  <label>Tema o propósito</label><textarea id="textTopic" placeholder="Cuéntame de qué tratará..."></textarea><button class="primary full" onclick="createText()">Crear borrador</button><textarea id="textResult" placeholder="Tu borrador aparecerá aquí..."></textarea><button class="secondary full" onclick="copyText()">Copiar texto</button>
 </section>
 
+<section id="shop" class="page hidden">
+ <button class="back" onclick="show('home')">← Inicio</button><h1>Tienda AI LIFE 🪙</h1>
+ <div class="panel"><h2>Tu saldo: 🪙 <span id="shopCoins">0</span></h2><p class="muted">Canjea monedas por accesorios y aspectos para tu perfil.</p></div>
+ <div class="lesson row"><div><b>🌈 Avatar arcoíris</b><p class="muted">Un estilo especial para tu perfil.</p><span class="pill">30 monedas</span></div><button class="primary small" onclick="buyReward('rainbow',30)">Canjear</button></div>
+ <div class="lesson row"><div><b>🚀 Marco espacial</b><p class="muted">Un marco brillante para tu avatar.</p><span class="pill">50 monedas</span></div><button class="primary small" onclick="buyReward('space',50)">Canjear</button></div>
+ <p class="notice">Las monedas son puntos virtuales dentro de AI LIFE. No tienen valor monetario ni se pueden comprar con dinero.</p>
+</section>
+<section id="games" class="page hidden">
+ <button class="back" onclick="show('home')">← Inicio</button><h1>Zona de juegos 🎮</h1>
+ <div class="panel"><h2>🧩 Rompecubos</h2><p class="muted">Acomoda las piezas para completar filas. Se desbloquea al conseguir 100 puntos de aprendizaje.</p><p id="gameLock" class="pill">🔒 Bloqueado: necesitas 100 puntos</p><button id="playGameButton" class="primary full" onclick="startBlockGame()" disabled>Jugar</button><div id="blockGame" class="hidden"></div></div>
+</section>
 <section id="learn" class="page hidden">
  <button class="back" onclick="show('home')">← Inicio</button><h1>Academia Viva 🚀</h1><p class="muted">Aprende a tu ritmo. Tus puntos y avances se guardan en este dispositivo.</p>
  <div class="panel">
@@ -89,15 +109,26 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
 </main>
 <script>
 const $=id=>document.getElementById(id);
-function startApp(){$('splash').classList.add('hidden');$('app').classList.remove('hidden');show('home');renderTasks();renderAcademy()}
-function show(id){document.querySelectorAll('#app>section').forEach(s=>s.classList.add('hidden'));$(id).classList.remove('hidden');if(id==='tasks')renderTasks();if(id==='learn')renderAcademy();if(id==='home')updateHome()}
+function startApp(){$('splash').classList.add('hidden');$('app').classList.remove('hidden');renderProfiles();renderTasks();renderAcademy();updateWallet();if(activeUserId==='guest')show('profiles');else show('home')}
+function show(id){document.querySelectorAll('#app>section').forEach(s=>s.classList.add('hidden'));$(id).classList.remove('hidden');if(id==='tasks')renderTasks();if(id==='learn')renderAcademy();if(id==='home'){updateHome();updateWallet()}if(id==='profiles')renderProfiles();if(id==='shop')updateWallet();if(id==='games')updateWallet()}
 function updateHome(){let p=getProfile();$('homeProgress').textContent=`${p.points} puntos · ${p.done.length} lecciones completadas`;}
-function getProfileName(){return localStorage.getItem('ailife_profile')||'jóvenes'}
-function setProfileName(v){localStorage.setItem('ailife_profile',v)}
+let activeUserId=localStorage.getItem('ailife_active_user')||'guest';
+let selectedAvatar='🦊';
+const avatarList=['🦊','🐼','🐸','🦁','🐱','🐶','🐵','🐧'];
+function getFamilyUsers(){try{return JSON.parse(localStorage.getItem('ailife_family_users')||'[]')}catch(e){return []}}
+function saveFamilyUsers(a){localStorage.setItem('ailife_family_users',JSON.stringify(a))}
+function getProfileName(){let u=getFamilyUsers().find(x=>x.id===activeUserId);return u?u.id:'guest'}
+function setProfileName(v){activeUserId=v;localStorage.setItem('ailife_active_user',v)}
 function getAllProfiles(){try{return JSON.parse(localStorage.getItem('ailife_profiles')||'{}')}catch(e){return {}}}
 function saveAllProfiles(a){localStorage.setItem('ailife_profiles',JSON.stringify(a))}
-function getProfile(){let a=getAllProfiles(),n=getProfileName();if(!a[n])a[n]={points:0,done:[],daily:{},lastDay:'',streak:0};return a[n]}
-function saveProfile(p){let a=getAllProfiles();a[getProfileName()]=p;saveAllProfiles(a)}
+function getProfile(){let a=getAllProfiles(),n=getProfileName();if(!a[n])a[n]={points:0,coins:0,done:[],daily:{},lastDay:'',streak:0,rewards:[],level:'jóvenes'};if(a[n].coins===undefined)a[n].coins=0;if(!a[n].rewards)a[n].rewards=[];return a[n]}
+function saveProfile(p){let a=getAllProfiles();a[getProfileName()]=p;saveAllProfiles(a);updateWallet()}
+function updateWallet(){let p=getProfile(),u=getFamilyUsers().find(x=>x.id===activeUserId);if($('homeCoins'))$('homeCoins').textContent=p.coins||0;if($('shopCoins'))$('shopCoins').textContent=p.coins||0;if($('activeProfileLabel'))$('activeProfileLabel').textContent=(u?u.avatar+' '+u.name:'👤 Perfil invitado');if($('welcomeTitle'))$('welcomeTitle').textContent='¡Hola, '+(u?u.name:'explorador')+'! 👋';if($('gameLock')){$('gameLock').textContent=p.points>=100?'🔓 ¡Desbloqueado!':'🔒 Bloqueado: necesitas '+Math.max(0,100-p.points)+' puntos';$('playGameButton').disabled=p.points<100;}} 
+function renderProfiles(){let users=getFamilyUsers();$('avatarChoices').innerHTML=avatarList.map(a=>`<button class="tile" style="min-height:65px;text-align:center;font-size:26px" onclick="chooseAvatar('${a}')">${a}</button>`).join('');$('profileCards').innerHTML=users.length?users.map(u=>`<div class="lesson row"><b>${u.avatar} ${escapeHtml(u.name)}</b><button class="primary small" onclick="loginFamilyProfile('${u.id}')">Entrar</button></div>`).join(''):'<p class="muted">Aún no hay perfiles creados.</p>'}
+function chooseAvatar(a){selectedAvatar=a}
+function createFamilyProfile(){let name=$('newProfileName').value.trim(),pin=$('newProfilePin').value.trim();if(!name||!/^\\d{4}$/.test(pin)){alert('Escribe un nombre y un PIN de 4 números.');return}let users=getFamilyUsers();if(users.some(u=>u.name.toLowerCase()===name.toLowerCase())){alert('Ese nombre ya existe. Prueba con otro.');return}let id='u'+Date.now();users.push({id,name,avatar:selectedAvatar,pin});saveFamilyUsers(users);let a=getAllProfiles();a[id]={points:0,coins:0,done:[],daily:{},lastDay:'',streak:0,rewards:[],level:'jóvenes'};saveAllProfiles(a);$('newProfileName').value='';$('newProfilePin').value='';loginFamilyProfile(id)}
+function loginFamilyProfile(id){let u=getFamilyUsers().find(x=>x.id===id);if(!u)return;let pin=prompt('Ingresa el PIN de 4 números para '+u.name);if(pin===null)return;if(pin!==u.pin){alert('PIN incorrecto.');return}setProfileName(id);renderProfiles();renderAcademy();updateWallet();show('home')}
+function changeProfile(){let p=getProfile();p.level=$('profileSelect').value;saveProfile(p);$('profileTitle').textContent='Nivel: '+p.level;renderAcademy()}
 function changeProfile(){setProfileName($('profileSelect').value);$('profileTitle').textContent='Perfil: '+$('profileSelect').value;renderAcademy()}
 const lessons=[
 {cat:'Inteligencia artificial',icon:'🤖',items:[
@@ -120,9 +151,9 @@ const lessons=[
 {title:'Porcentajes en la vida diaria',body:'Un porcentaje representa una parte de cien. Por ejemplo, 25% significa 25 de cada 100. Los porcentajes aparecen en descuentos, encuestas y estadísticas.',q:'¿Qué significa 50%?',opts:['La mitad','El doble','Una décima parte'],a:0,why:'50 de cada 100 equivale a la mitad.'},
 {title:'Datos y privacidad',body:'Los datos personales pueden identificarte o describir aspectos de tu vida. Comparte solo lo necesario, usa contraseñas únicas y consulta a un adulto de confianza si algo en línea te parece sospechoso.',q:'¿Qué conviene hacer con una contraseña?',opts:['Compartirla públicamente','Mantenerla privada','Usar la misma en todos lados'],a:1,why:'Una contraseña debe mantenerse privada y ser difícil de adivinar.'}]}
 ];
-function renderAcademy(){let p=getProfile();$('profileSelect').value=getProfileName();$('profileTitle').textContent='Perfil: '+getProfileName();$('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;$('progressBar').style.width=Math.min(100,p.done.length/lessons.reduce((n,c)=>n+c.items.length,0)*100)+'%';$('badges').innerHTML=(p.points>=50?'<span class="pill">🏅 Primer reto</span>':'')+(p.done.length>=5?'<span class="pill">📘 Curioso</span>':'')+(p.done.length>=10?'<span class="pill">🌟 Explorador</span>':'');let today=new Date().toISOString().slice(0,10);$('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';$('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];$('categories').innerHTML=lessons.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} lecciones</span></div><div id="cat${i}"></div></div>`).join('');lessons.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>`<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(i+'-'+j)?'✓ ':''}${l.title}</button>`).join('')});updateHome()}
+function renderAcademy(){let p=getProfile();$('profileSelect').value=p.level||'jóvenes';$('profileTitle').textContent='Nivel: '+(p.level||'jóvenes');$('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;$('progressBar').style.width=Math.min(100,p.done.length/lessons.reduce((n,c)=>n+c.items.length,0)*100)+'%';$('badges').innerHTML=(p.points>=50?'<span class="pill">🏅 Primer reto</span>':'')+(p.done.length>=5?'<span class="pill">📘 Curioso</span>':'')+(p.done.length>=10?'<span class="pill">🌟 Explorador</span>':'');let today=new Date().toISOString().slice(0,10);$('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';$('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];$('categories').innerHTML=lessons.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} lecciones</span></div><div id="cat${i}"></div></div>`).join('');lessons.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>`<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(i+'-'+j)?'✓ ':''}${l.title}</button>`).join('')});updateHome()}
 function openLesson(i,j){let l=lessons[i].items[j];$('lessonArea').classList.remove('hidden');$('lessonArea').innerHTML=`<div class="row"><h2>${l.title}</h2><button class="back" onclick="$('lessonArea').classList.add('hidden')">Cerrar ✕</button></div><p class="muted">${l.body}</p><hr style="border-color:#29405f"><b>${l.q}</b><div id="lessonChoices"></div><p id="lessonFeedback" class="muted"></p>`;$('lessonChoices').innerHTML=l.opts.map((o,k)=>`<button class="choice" onclick="answerLesson(${i},${j},${k})">${String.fromCharCode(65+k)}. ${o}</button>`).join('');$('lessonArea').scrollIntoView({behavior:'smooth',block:'start'})}
-function answerLesson(i,j,k){let l=lessons[i].items[j],p=getProfile(),key=i+'-'+j,buttons=$('lessonChoices').querySelectorAll('button');buttons.forEach((b,n)=>{b.disabled=true;if(n===l.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});if(k===l.a&&!p.done.includes(key)){p.done.push(key);p.points+=10;saveProfile(p);$('lessonFeedback').textContent='¡Correcto! +10 puntos. '+l.why}else if(k===l.a){$('lessonFeedback').textContent='¡Correcto! Ya habías completado esta lección. '+l.why}else{$('lessonFeedback').textContent='No pasa nada. La respuesta correcta está marcada. '+l.why}renderAcademy()}
+function answerLesson(i,j,k){let l=lessons[i].items[j],p=getProfile(),key=i+'-'+j,buttons=$('lessonChoices').querySelectorAll('button');buttons.forEach((b,n)=>{b.disabled=true;if(n===l.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});if(k===l.a&&!p.done.includes(key)){p.done.push(key);p.points+=10;p.coins=(p.coins||0)+10;saveProfile(p);$('lessonFeedback').textContent='¡Correcto! +10 puntos. '+l.why}else if(k===l.a){$('lessonFeedback').textContent='¡Correcto! Ya habías completado esta lección. '+l.why}else{$('lessonFeedback').textContent='No pasa nada. La respuesta correcta está marcada. '+l.why}renderAcademy()}
 const dailyBank=[
 {q:'¿Qué planeta habitamos?',o:['Venus','Tierra','Júpiter'],a:1},
 {q:'¿Cuántos lados tiene un triángulo?',o:['Tres','Cuatro','Cinco'],a:0},
@@ -137,7 +168,7 @@ const dailyBank=[
 ];
 let dailyIndex=0,dailyScore=0,dailySet=[];
 function startDaily(){let p=getProfile(),date=new Date().toISOString().slice(0,10);if(p.daily[date])return;let seed=Number(date.replaceAll('-',''));dailySet=Array.from({length:5},(_,i)=>dailyBank[(seed+i*3)%dailyBank.length]);dailyIndex=0;dailyScore=0;$('dailyQuiz').classList.remove('hidden');$('dailyButton').classList.add('hidden');showDailyQuestion()}
-function showDailyQuestion(){if(dailyIndex>=5){let p=getProfile(),date=new Date().toISOString().slice(0,10);if(dailyScore===5){p.daily[date]=true;p.points+=50;let yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);p.streak=p.lastDay===yesterday?p.streak+1:1;p.lastDay=date;saveProfile(p);$('dailyQuiz').innerHTML='<h3>¡Excelente! 🎉</h3><p>Respondiste las cinco preguntas correctamente y ganaste 50 puntos.</p>'}else{$('dailyQuiz').innerHTML=`<h3>Reto terminado</h3><p>Tu resultado: ${dailyScore} de 5. Para ganar los 50 puntos necesitas responder las cinco correctamente. Puedes volver a intentarlo mañana.</p>`}renderAcademy();return}let q=dailySet[dailyIndex];$('dailyQuiz').innerHTML=`<p class="pill">Pregunta ${dailyIndex+1} de 5</p><h3>${q.q}</h3>${q.o.map((o,k)=>`<button class="choice" onclick="answerDaily(${k})">${o}</button>`).join('')}`}
+function showDailyQuestion(){if(dailyIndex>=5){let p=getProfile(),date=new Date().toISOString().slice(0,10);if(dailyScore===5){p.daily[date]=true;p.points+=50;p.coins=(p.coins||0)+50;let yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);p.streak=p.lastDay===yesterday?p.streak+1:1;p.lastDay=date;saveProfile(p);$('dailyQuiz').innerHTML='<h3>¡Excelente! 🎉</h3><p>Respondiste las cinco preguntas correctamente y ganaste 50 puntos.</p>'}else{$('dailyQuiz').innerHTML=`<h3>Reto terminado</h3><p>Tu resultado: ${dailyScore} de 5. Para ganar los 50 puntos necesitas responder las cinco correctamente. Puedes volver a intentarlo mañana.</p>`}renderAcademy();return}let q=dailySet[dailyIndex];$('dailyQuiz').innerHTML=`<p class="pill">Pregunta ${dailyIndex+1} de 5</p><h3>${q.q}</h3>${q.o.map((o,k)=>`<button class="choice" onclick="answerDaily(${k})">${o}</button>`).join('')}`}
 function answerDaily(k){let q=dailySet[dailyIndex],bs=$('dailyQuiz').querySelectorAll('button');bs.forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});if(k===q.a)dailyScore++;setTimeout(()=>{dailyIndex++;showDailyQuestion()},650)}
 function explainTopic(){let t=$('explainInput').value.trim().toLowerCase();if(!t){$('explainOutput').textContent='Escribe primero un tema.';return}let answer='Puedo ayudarte a entenderlo. Piensa en el tema como una idea que podemos dividir en partes pequeñas. Busca qué significa, para qué sirve y un ejemplo de la vida diaria.';if(t.includes('ia')||t.includes('inteligencia'))answer='La inteligencia artificial es una tecnología que ayuda a las computadoras a reconocer patrones y realizar tareas, como comprender preguntas o identificar imágenes. Es una herramienta: puede equivocarse y debemos revisar sus respuestas.';else if(t.includes('porcentaje'))answer='Un porcentaje es una forma de expresar una parte de cada cien. Si tienes 100 elementos y tomas 20, tomaste el 20%.';else if(t.includes('presupuesto')||t.includes('dinero'))answer='Un presupuesto es un plan para decidir cómo usar el dinero: cuánto recibes, cuánto necesitas gastar y cuánto puedes reservar para una meta.';else if(t.includes('fotosíntesis'))answer='La fotosíntesis es el proceso por el que las plantas usan luz, agua y dióxido de carbono para producir su alimento y liberar oxígeno.';$('explainOutput').textContent=answer}
 function addTask(){let v=$('taskInput').value.trim();if(!v)return;let a=JSON.parse(localStorage.getItem('ailife_tasks_v2')||'[]');a.push({text:v,done:false});localStorage.setItem('ailife_tasks_v2',JSON.stringify(a));$('taskInput').value='';renderTasks()}
@@ -152,6 +183,8 @@ function addBubble(t,who){let d=document.createElement('div');d.className='bubbl
 function sendChat(){let q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addBubble(q,'user');let s=q.toLowerCase(),r='Puedo ayudarte a organizar esa idea. Divide el problema en pasos: define qué necesitas, reúne la información y elige una primera acción pequeña.';if(s.includes('hola'))r='¡Hola! ¿Qué te gustaría resolver hoy?';else if(s.includes('tarea')||s.includes('organizar'))r='Prueba escribir tus pendientes, elegir el más importante y dividirlo en pasos pequeños. Puedes guardarlos en la sección Mis tareas.';else if(s.includes('inteligencia artificial')||s.includes('qué es ia'))r='La inteligencia artificial es una tecnología que permite a los sistemas reconocer patrones y realizar tareas como comprender texto o identificar imágenes. Puede equivocarse, así que conviene verificar la información.';else if(s.includes('gracias'))r='¡Con gusto! Sigue aprendiendo y probando ideas.';lastBot=r;setTimeout(()=>addBubble(r,'bot'),250)}
 function speakLast(){if(lastBot&&'speechSynthesis'in window){let u=new SpeechSynthesisUtterance(lastBot);u.lang='es-CO';speechSynthesis.speak(u)}}
 function voiceInput(){let R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){alert('El dictado no está disponible en este navegador.');return}let r=new R();r.lang='es-CO';r.onresult=e=>$('chatInput').value=e.results[0][0].transcript;r.start()}
+function buyReward(id,cost){let p=getProfile();if((p.coins||0)<cost){alert('Todavía no tienes suficientes monedas.');return}if(p.rewards.includes(id)){alert('Ya tienes esta recompensa.');return}p.coins-=cost;p.rewards.push(id);saveProfile(p);alert('¡Recompensa desbloqueada! 🎉');updateWallet()}
+function startBlockGame(){let p=getProfile();if(p.points<100){alert('Necesitas 100 puntos para desbloquear este juego.');return}let board=Array(16).fill(0);let score=0;function draw(){let html='<p class="muted">Toca una casilla vacía para colocar un bloque. Completa una fila de cuatro para sumar puntos.</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:300px;margin:12px auto">';board.forEach((v,i)=>html+=`<button class="choice" style="height:58px;text-align:center;font-size:22px;margin:0" onclick="placeBlock(${i})">${v?'🟦':'·'}</button>`);html+='</div><p class="muted">Puntos del juego: '+score+'</p><button class="secondary full" onclick="startBlockGame()">Reiniciar juego</button>';return html}window.placeBlock=function(i){if(board[i])return;board[i]=1;let cleared=false;for(let r=0;r<4;r++){let row=[0,1,2,3].map(c=>r*4+c);if(row.every(x=>board[x])){row.forEach(x=>board[x]=0);score+=10;cleared=true}}for(let c=0;c<4;c++){let col=[0,1,2,3].map(r=>r*4+c);if(col.every(x=>board[x])){col.forEach(x=>board[x]=0);score+=10;cleared=true}}if(board.every(Boolean)){board=Array(16).fill(0)}$('blockGame').innerHTML=draw()};$('blockGame').classList.remove('hidden');$('blockGame').innerHTML=draw()}
 if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
 </body>
