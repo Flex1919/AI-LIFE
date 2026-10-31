@@ -1,5 +1,4 @@
-
-const CACHE_NAME = "ai-life-v2";
+const CACHE_NAME = "ai-life-v3-3";
 
 const FILES = [
   "./",
@@ -34,9 +33,31 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
+  const isPage =
+    event.request.mode === "navigate" ||
+    new URL(event.request.url).pathname.endsWith("/index.html");
+
+  if (isPage) {
+    event.respondWith(
+      fetch(new Request(event.request, { cache: "no-store" }))
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache =>
+              cache.put("./index.html", copy)
+            );
+          }
+          return response;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
   event.respondWith(
     fetch(event.request).catch(() =>
       caches.match(event.request)
     )
   );
 });
+
