@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#081326">
-<title>AI LIFE 3.4</title>
+<title>AI LIFE 3.5</title>
 <link rel="manifest" href="./manifest.json">
 <style>
 :root{--bg:#081326;--panel:#111f38;--panel2:#172944;--blue:#62b7ff;--cyan:#62e5dc;--muted:#a9bad2;--white:#f4f8ff;--line:#29405f;--gold:#ffd36e}
@@ -28,7 +28,7 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
 <section id="splash" class="splash">
  <div class="splashbox">
   <img class="heroimg" src="https://flex1919.github.io/AI-LIFE/file_00000000ba6c81f58317195ca9a1400c.png" alt="Avatar AI LIFE" onerror="this.style.display='none'">
-  <h1>AI <span style="color:#62e5dc">LIFE</span> 3.4</h1>
+  <h1>AI <span style="color:#62e5dc">LIFE</span> 3.5</h1>
   <p>Tu espacio para aprender, organizarte y crear.</p>
   <button class="primary full" onclick="startApp()">COMENZAR</button>
  </div>
@@ -37,7 +37,7 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
 <header><div class="brand">AI <span>LIFE</span></div><div class="row"><button class="secondary small" onclick="show('profiles')">👤 Perfiles</button><div class="version">VERSIÓN 3.4</div></div></header>
 <section id="profiles" class="page hidden">
  <h1>¡Bienvenidos a AI LIFE! 🌈</h1><p class="muted">Cada integrante puede tener su propio espacio, avatar y avance.</p>
- <div class="panel"><h2>Crear perfil</h2><label>Nombre</label><input id="newProfileName" maxlength="18" placeholder="Ej. Mariana"><label>Elige un avatar</label><div class="grid" id="avatarChoices"></div><label>PIN de 4 dígitos</label><input id="newProfilePin" inputmode="numeric" maxlength="4" type="password" placeholder="Crea un PIN"><button class="primary full" onclick="createFamilyProfile()">Crear perfil</button><p class="notice">El PIN es una protección básica local, no una cuenta segura en internet. No uses una contraseña importante.</p></div>
+ <div class="panel"><h2>Crear perfil</h2><label>Nombre</label><input id="newProfileName" maxlength="18" placeholder="Ej. Mariana"><label>Grupo de edad</label><select id="newProfileAge"><option value="niños">Niños (5–12 años)</option><option value="jóvenes" selected>Jóvenes (13–17 años)</option><option value="adultos">Adultos (18+ años)</option></select><label>Elige un avatar</label><div class="grid" id="avatarChoices"></div><label>PIN de 4 dígitos</label><input id="newProfilePin" inputmode="numeric" maxlength="4" type="password" placeholder="Crea un PIN"><button class="primary full" onclick="createFamilyProfile()">Crear perfil</button><p class="notice">El PIN es una protección básica local, no una cuenta segura en internet. No uses una contraseña importante.</p></div>
  <h2>Perfiles disponibles</h2><div id="profileCards"></div>
  <button class="secondary full" onclick="show('home')">Continuar al inicio</button>
 </section>
@@ -48,7 +48,7 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
   <button class="tile" onclick="show('chat')"><span class="emoji">🤖</span><strong>Asistente IA</strong><small>Pregunta y explora</small></button>
   <button class="tile" onclick="show('tasks')"><span class="emoji">✅</span><strong>Mis tareas</strong><small>Organiza tu día</small></button>
   <button class="tile" onclick="show('writer')"><span class="emoji">✍️</span><strong>Crear textos</strong><small>Ideas y redacción</small></button>
-  <button class="tile" onclick="show('learn')"><span class="emoji">🚀</span><strong>Aprender</strong><small>Academia Viva 3.4</small></button>
+  <button class="tile" onclick="show('learn')"><span class="emoji">🚀</span><strong>Aprender</strong><small>Academia Viva 3.5</small></button>
   <button class="tile" onclick="show('shop')"><span class="emoji">🪙</span><strong>Tienda</strong><small>Canjea tus monedas</small></button>
   <button class="tile" onclick="show('games')"><span class="emoji">🎮</span><strong>Juegos</strong><small>Desbloquea minijuegos</small></button>
  </div>
@@ -126,7 +126,7 @@ function saveProfile(p){let a=getAllProfiles();a[getProfileName()]=p;saveAllProf
 function updateWallet(){let p=getProfile(),u=getFamilyUsers().find(x=>x.id===activeUserId);if($('homeCoins'))$('homeCoins').textContent=p.coins||0;if($('shopCoins'))$('shopCoins').textContent=p.coins||0;if($('activeProfileLabel'))$('activeProfileLabel').textContent=(u?u.avatar+' '+u.name:'👤 Perfil invitado');if($('welcomeTitle'))$('welcomeTitle').textContent='¡Hola, '+(u?u.name:'explorador')+'! 👋';if($('gameLock')){$('gameLock').textContent=p.points>=100?'🔓 ¡Desbloqueado!':'🔒 Bloqueado: necesitas '+Math.max(0,100-p.points)+' puntos';$('playGameButton').disabled=p.points<100;}} 
 function renderProfiles(){let users=getFamilyUsers();$('avatarChoices').innerHTML=avatarList.map((a,i)=>`<button type="button" class="tile avatar-option ${selectedAvatar===a?'selected':''}" aria-label="Avatar ${i+1}" onclick="chooseAvatar('${a}')">${a}</button>`).join('');$('profileCards').innerHTML=users.length?users.map(u=>`<div class="lesson row"><b>${u.avatar} ${escapeHtml(u.name)}</b><button class="primary small" onclick="loginFamilyProfile('${u.id}')">Entrar</button></div>`).join(''):'<p class="muted">Aún no hay perfiles creados.</p>'}
 function chooseAvatar(a){selectedAvatar=a;renderProfiles()}
-function createFamilyProfile(){let name=$('newProfileName').value.trim(),pin=$('newProfilePin').value.trim();if(!name){alert('Escribe el nombre del perfil.');$('newProfileName').focus();return}if(!/^\d{4}$/.test(pin)){alert('El PIN debe tener exactamente 4 números.');$('newProfilePin').focus();return}let users=getFamilyUsers();if(users.some(u=>u.name.toLowerCase()===name.toLowerCase())){alert('Ese nombre ya existe. Prueba con otro.');return}let id='u'+Date.now();users.push({id,name,avatar:selectedAvatar,pin});saveFamilyUsers(users);let a=getAllProfiles();a[id]={points:0,coins:0,done:[],daily:{},lastDay:'',streak:0,rewards:[],level:'jóvenes'};saveAllProfiles(a);$('newProfileName').value='';$('newProfilePin').value='';setProfileName(id);renderProfiles();renderAcademy();updateWallet();show('home')}
+function createFamilyProfile(){let name=$('newProfileName').value.trim(),pin=$('newProfilePin').value.trim();if(!name){alert('Escribe el nombre del perfil.');$('newProfileName').focus();return}if(!/^\d{4}$/.test(pin)){alert('El PIN debe tener exactamente 4 números.');$('newProfilePin').focus();return}let users=getFamilyUsers();if(users.some(u=>u.name.toLowerCase()===name.toLowerCase())){alert('Ese nombre ya existe. Prueba con otro.');return}let id='u'+Date.now(),age=$('newProfileAge').value;users.push({id,name,avatar:selectedAvatar,pin});saveFamilyUsers(users);let a=getAllProfiles();a[id]={points:0,coins:0,done:[],daily:{},lastDay:'',streak:0,rewards:[],level:age,ageGroup:age};saveAllProfiles(a);$('newProfileName').value='';$('newProfilePin').value='';setProfileName(id);renderProfiles();renderAcademy();updateWallet();show('home')}
 function loginFamilyProfile(id){let u=getFamilyUsers().find(x=>x.id===id);if(!u)return;let pin=prompt('Ingresa el PIN de 4 números para '+u.name);if(pin===null)return;if(pin!==u.pin){alert('PIN incorrecto.');return}setProfileName(id);renderProfiles();renderAcademy();updateWallet();show('home')}
 function changeProfile(){let p=getProfile();p.level=$('profileSelect').value;saveProfile(p);$('profileTitle').textContent='Nivel: '+p.level;renderAcademy()}
 const lessons=[
@@ -185,6 +185,105 @@ function voiceInput(){let R=window.SpeechRecognition||window.webkitSpeechRecogni
 function buyReward(id,cost){let p=getProfile();if((p.coins||0)<cost){alert('Todavía no tienes suficientes monedas.');return}if(p.rewards.includes(id)){alert('Ya tienes esta recompensa.');return}p.coins-=cost;p.rewards.push(id);saveProfile(p);alert('¡Recompensa desbloqueada! 🎉');updateWallet()}
 function startBlockGame(){let p=getProfile();if(p.points<100){alert('Necesitas 100 puntos para desbloquear este juego.');return}let board=Array(16).fill(0);let score=0;function draw(){let html='<p class="muted">Toca una casilla vacía para colocar un bloque. Completa una fila de cuatro para sumar puntos.</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:300px;margin:12px auto">';board.forEach((v,i)=>html+=`<button class="choice" style="height:58px;text-align:center;font-size:22px;margin:0" onclick="placeBlock(${i})">${v?'🟦':'·'}</button>`);html+='</div><p class="muted">Puntos del juego: '+score+'</p><button class="secondary full" onclick="startBlockGame()">Reiniciar juego</button>';return html}window.placeBlock=function(i){if(board[i])return;board[i]=1;let cleared=false;for(let r=0;r<4;r++){let row=[0,1,2,3].map(c=>r*4+c);if(row.every(x=>board[x])){row.forEach(x=>board[x]=0);score+=10;cleared=true}}for(let c=0;c<4;c++){let col=[0,1,2,3].map(r=>r*4+c);if(col.every(x=>board[x])){col.forEach(x=>board[x]=0);score+=10;cleared=true}}if(board.every(Boolean)){board=Array(16).fill(0)}$('blockGame').innerHTML=draw()};$('blockGame').classList.remove('hidden');$('blockGame').innerHTML=draw()}
 if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+
+// AI LIFE 3.5 — Academia adaptada por edades.
+function getAgeGroup(p){
+  let g=p.ageGroup||p.level||'jóvenes';
+  if(g==='niños'||g==='jóvenes'||g==='adultos') return g;
+  return 'jóvenes';
+}
+function getLessonsForProfile(){
+  let p=getProfile(),g=getAgeGroup(p);
+  if(!p.ageGroup){p.ageGroup=g;p.level=g;saveProfile(p);}
+  return g==='niños'?childLessons:(g==='adultos'?adultLessons:lessons);
+}
+const childLessons=[
+ {cat:'Animales y naturaleza',icon:'🐾',items:[
+  {title:'Los sonidos de los animales',body:'Cada animal tiene un sonido especial. Escucha, observa y aprende.',q:'¿Qué sonido hace la vaca?',opts:['Muuu','Guau','Miau'],a:0,why:'¡Muy bien! La vaca hace “muuu”.'},
+  {title:'Patitas y animales',body:'Algunos animales caminan con dos patas y otros con cuatro.',q:'¿Cuántas patas tiene normalmente un perro?',opts:['Dos','Cuatro','Seis'],a:1,why:'Los perros normalmente tienen cuatro patas.'},
+  {title:'La casa de las abejas',body:'Las abejas viven juntas y ayudan a polinizar las flores.',q:'¿Qué producen las abejas?',opts:['Miel','Leche','Pan'],a:0,why:'Las abejas producen miel.'}
+ ]},
+ {cat:'Colores y formas',icon:'🎨',items:[
+  {title:'Conozcamos los colores',body:'Los colores están en todas partes. Mira a tu alrededor y encuentra objetos de distintos colores.',q:'¿Cuál de estos es un color?',opts:['Azul','Círculo','Triángulo'],a:0,why:'¡Sí! El azul es un color.'},
+  {title:'Formas geométricas',body:'Las formas nos ayudan a describir los objetos.',q:'¿Qué forma tiene cuatro lados iguales?',opts:['Círculo','Cuadrado','Triángulo'],a:1,why:'El cuadrado tiene cuatro lados iguales.'},
+  {title:'Contemos juntos',body:'Contar nos ayuda a saber cuántos objetos hay.',q:'¿Cuánto es 2 + 3?',opts:['4','5','6'],a:1,why:'Dos más tres son cinco.'}
+ ]},
+ {cat:'Pequeños científicos',icon:'🔬',items:[
+  {title:'El día y la noche',body:'La Tierra gira. Por eso tenemos momentos de luz y momentos de oscuridad.',q:'¿Qué vemos normalmente en el cielo durante el día?',opts:['El Sol','La Luna llena siempre','Las estrellas siempre'],a:0,why:'El Sol ilumina nuestro día.'},
+  {title:'Cuidemos las plantas',body:'Las plantas necesitan agua, luz y aire para crecer.',q:'¿Qué necesita una planta para crecer?',opts:['Agua y luz','Juguetes','Zapatos'],a:0,why:'El agua y la luz ayudan a las plantas a crecer.'}
+ ]}
+];
+const adultLessons=[
+ {cat:'Tecnología y mundo digital',icon:'💻',items:[
+  {title:'Privacidad digital',body:'La privacidad digital consiste en controlar qué información compartes y con quién. Evita publicar datos sensibles y revisa los permisos de tus aplicaciones.',q:'¿Cuál es una buena práctica de privacidad?',opts:['Compartir claves por chat','Revisar permisos y limitar datos personales','Usar la misma clave en todo'],a:1,why:'Limitar los datos y revisar permisos reduce riesgos.'},
+  {title:'Inteligencia artificial en la vida diaria',body:'La IA puede apoyar tareas como organizar información, traducir textos y reconocer patrones. Sus resultados deben revisarse.',q:'¿Qué conviene hacer antes de tomar una decisión importante basada en IA?',opts:['Verificar la información','Aceptar todo sin revisar','Compartir datos privados'],a:0,why:'La IA puede equivocarse; verifica los datos importantes.'}
+ ]},
+ {cat:'Finanzas y decisiones',icon:'💰',items:[
+  {title:'Presupuesto personal',body:'Un presupuesto compara ingresos y gastos para ayudarte a planear. Registrar gastos permite identificar oportunidades de ahorro.',q:'¿Para qué sirve un presupuesto?',opts:['Para planear ingresos y gastos','Para gastar sin límite','Para evitar revisar cuentas'],a:0,why:'Un presupuesto ayuda a tomar decisiones informadas.'},
+  {title:'Interés compuesto',body:'El interés compuesto ocurre cuando los intereses se suman al capital y también pueden generar intereses en periodos posteriores.',q:'¿Qué caracteriza al interés compuesto?',opts:['Los intereses pueden generar nuevos intereses','El capital nunca cambia','No existen intereses'],a:0,why:'Los intereses se incorporan al saldo y pueden producir nuevos intereses.'}
+ ]},
+ {cat:'Cultura y pensamiento crítico',icon:'🌎',items:[
+  {title:'Evaluar una noticia',body:'Antes de compartir una noticia, revisa quién la publica, cuándo se publicó y qué pruebas presenta. Compara con otras fuentes confiables.',q:'¿Qué ayuda a evaluar una noticia?',opts:['Revisar fuente, fecha y evidencias','Leer solo el titular','Compartirla porque es viral'],a:0,why:'La fuente y las evidencias ayudan a valorar su confiabilidad.'},
+  {title:'Pensamiento crítico',body:'Pensar críticamente es analizar información, reconocer supuestos y comparar explicaciones antes de concluir.',q:'¿Qué actitud demuestra pensamiento crítico?',opts:['Hacer preguntas y contrastar evidencias','Aceptar el primer comentario','Ignorar datos contrarios'],a:0,why:'Contrastar evidencias permite formar conclusiones mejor fundamentadas.'}
+ ]}
+];
+const childDailyBank=[
+ {q:'¿Qué sonido hace un gato?',o:['Miau','Muuu','Pío'],a:0},
+ {q:'¿Cuántas patas tiene una araña?',o:['Seis','Ocho','Cuatro'],a:1},
+ {q:'¿Cuál es el color del cielo despejado?',o:['Azul','Verde','Naranja'],a:0},
+ {q:'¿Cuánto es 1 + 2?',o:['2','3','4'],a:1},
+ {q:'¿Qué usamos para ver?',o:['Los ojos','Las rodillas','Los codos'],a:0},
+ {q:'¿Qué forma tiene una pelota?',o:['Esfera','Cuadrado','Triángulo'],a:0},
+ {q:'¿Qué animal pone huevos?',o:['Gallina','Perro','Gato'],a:0},
+ {q:'¿Qué necesitan las plantas?',o:['Agua','Caramelos','Juguetes'],a:0}
+];
+const adultDailyBank=[
+ {q:'¿Qué práctica mejora la seguridad digital?',o:['Autenticación en dos pasos','Compartir contraseñas','Reutilizar claves'],a:0},
+ {q:'¿Qué describe un presupuesto?',o:['Plan de ingresos y gastos','Lista de deseos solamente','Un préstamo'],a:0},
+ {q:'¿Qué debes revisar en una noticia?',o:['Fuente y evidencias','Solo los comentarios','Solo la imagen'],a:0},
+ {q:'¿Qué es diversificar?',o:['Distribuir recursos entre distintas opciones','Poner todo en una sola opción','Gastar el presupuesto'],a:0},
+ {q:'¿Qué hace una hoja de cálculo?',o:['Organiza y calcula datos','Repara equipos','Reemplaza internet'],a:0},
+ {q:'¿Qué es una meta medible?',o:['Un objetivo con indicador verificable','Una idea sin plazo','Una tarea sin resultado'],a:0},
+ {q:'¿Qué conviene hacer con una oferta sospechosa?',o:['Verificarla antes de entregar datos','Enviar claves de inmediato','Ignorar señales de alerta'],a:0}
+];
+function renderAcademy(){
+ let p=getProfile(),bank=getLessonsForProfile(),g=getAgeGroup(p),total=bank.reduce((n,c)=>n+c.items.length,0);
+ $('profileSelect').value=g;
+ $('profileTitle').textContent='Grupo: '+(g==='niños'?'Niños (5–12)':g==='adultos'?'Adultos (18+)':'Jóvenes (13–17)');
+ $('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;
+ let completed=p.done.filter(k=>k.startsWith('v35-'+g+'-')).length;
+ $('progressBar').style.width=Math.min(100,completed/total*100)+'%';
+ $('badges').innerHTML=(p.points>=50?'<span class="pill">🏅 Primer reto</span>':'')+(completed>=3?'<span class="pill">📘 Curioso</span>':'')+(completed>=6?'<span class="pill">🌟 Explorador</span>':'');
+ let today=new Date().toISOString().slice(0,10);
+ $('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';
+ $('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];
+ $('categories').innerHTML=bank.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} actividades</span></div><div id="cat${i}"></div></div>`).join('');
+ bank.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>{let key='v35-'+g+'-'+i+'-'+j;return `<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(key)?'✓ ':''}${l.title}</button>`}).join('')});
+ updateHome();
+}
+function openLesson(i,j){
+ let l=getLessonsForProfile()[i].items[j];
+ $('lessonArea').classList.remove('hidden');
+ $('lessonArea').innerHTML=`<div class="row"><h2>${l.title}</h2><button class="back" onclick="$('lessonArea').classList.add('hidden')">Cerrar ✕</button></div><p class="muted">${l.body}</p><hr style="border-color:#29405f"><b>${l.q}</b><div id="lessonChoices"></div><p id="lessonFeedback" class="muted"></p>`;
+ $('lessonChoices').innerHTML=l.opts.map((o,k)=>`<button class="choice" onclick="answerLesson(${i},${j},${k})">${String.fromCharCode(65+k)}. ${o}</button>`).join('');
+ $('lessonArea').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function answerLesson(i,j,k){
+ let bank=getLessonsForProfile(),l=bank[i].items[j],p=getProfile(),g=getAgeGroup(p),key='v35-'+g+'-'+i+'-'+j,buttons=$('lessonChoices').querySelectorAll('button');
+ buttons.forEach((b,n)=>{b.disabled=true;if(n===l.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});
+ if(k===l.a&&!p.done.includes(key)){p.done.push(key);p.points+=10;p.coins=(p.coins||0)+10;saveProfile(p);$('lessonFeedback').textContent='¡Correcto! +10 puntos. '+l.why}
+ else if(k===l.a){$('lessonFeedback').textContent='¡Correcto! Ya habías completado esta actividad. '+l.why}
+ else{$('lessonFeedback').textContent='No pasa nada. La respuesta correcta está marcada. '+l.why}
+ renderAcademy();
+}
+function startDaily(){
+ let p=getProfile(),date=new Date().toISOString().slice(0,10);if(p.daily[date])return;
+ let bank=getAgeGroup(p)==='niños'?childDailyBank:(getAgeGroup(p)==='adultos'?adultDailyBank:dailyBank);
+ let seed=Number(date.replaceAll('-',''))+p.points;
+ dailySet=Array.from({length:5},(_,i)=>bank[(seed+i*3)%bank.length]);
+ dailyIndex=0;dailyScore=0;$('dailyQuiz').classList.remove('hidden');$('dailyButton').classList.add('hidden');showDailyQuestion();
+}
+
 </script>
 </body>
 </html>
