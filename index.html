@@ -34,7 +34,7 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
  </div>
 </section>
 <main id="app" class="app hidden">
-<header><div class="brand">AI <span>LIFE</span></div><div class="row"><button class="secondary small" onclick="show('profiles')">👤 Perfiles</button><div class="version">VERSIÓN 3.4</div></div></header>
+<header><div class="brand">AI <span>LIFE</span></div><div class="row"><button class="secondary small" onclick="show('profiles')">👤 Perfiles</button><div class="version">VERSIÓN 3.5</div></div></header>
 <section id="profiles" class="page hidden">
  <h1>¡Bienvenidos a AI LIFE! 🌈</h1><p class="muted">Cada integrante puede tener su propio espacio, avatar y avance.</p>
  <div class="panel"><h2>Crear perfil</h2><label>Nombre</label><input id="newProfileName" maxlength="18" placeholder="Ej. Mariana"><label>Grupo de edad</label><select id="newProfileAge"><option value="niños">Niños (5–12 años)</option><option value="jóvenes" selected>Jóvenes (13–17 años)</option><option value="adultos">Adultos (18+ años)</option></select><label>Elige un avatar</label><div class="grid" id="avatarChoices"></div><label>PIN de 4 dígitos</label><input id="newProfilePin" inputmode="numeric" maxlength="4" type="password" placeholder="Crea un PIN"><button class="primary full" onclick="createFamilyProfile()">Crear perfil</button><p class="notice">El PIN es una protección básica local, no una cuenta segura en internet. No uses una contraseña importante.</p></div>
@@ -88,8 +88,8 @@ input,textarea,select{width:100%;background:#09172b;color:var(--white);border:1p
 <section id="learn" class="page hidden">
  <button class="back" onclick="show('home')">← Inicio</button><h1>Academia Viva 🚀</h1><p class="muted">Aprende a tu ritmo. Tus puntos y avances se guardan en este dispositivo.</p>
  <div class="panel">
-  <div class="row"><div><b id="profileTitle">Perfil: Jóvenes</b><p class="muted" style="margin:4px 0">Puedes cambiar el nivel cuando quieras.</p></div><span>🎓</span></div>
-  <select id="profileSelect" onchange="changeProfile()"><option value="niños">Niños</option><option value="jóvenes" selected>Jóvenes</option><option value="adultos">Adultos</option></select>
+  <div class="row"><div><b id="profileTitle">Contenido adaptado por edad</b><p class="muted" style="margin:4px 0">El contenido se adapta al grupo elegido al crear el perfil.</p></div><span>🎓</span></div>
+<p class="pill" id="ageGroupLabel">Grupo de edad del perfil</p>
   <div class="row">
    <div class="stat"><b id="points">0</b><span>Puntos</span></div><div class="stat"><b id="streak">0</b><span>Días activos</span></div><div class="stat"><b id="doneCount">0</b><span>Lecciones</span></div>
   </div>
@@ -150,7 +150,8 @@ const lessons=[
 {title:'Porcentajes en la vida diaria',body:'Un porcentaje representa una parte de cien. Por ejemplo, 25% significa 25 de cada 100. Los porcentajes aparecen en descuentos, encuestas y estadísticas.',q:'¿Qué significa 50%?',opts:['La mitad','El doble','Una décima parte'],a:0,why:'50 de cada 100 equivale a la mitad.'},
 {title:'Datos y privacidad',body:'Los datos personales pueden identificarte o describir aspectos de tu vida. Comparte solo lo necesario, usa contraseñas únicas y consulta a un adulto de confianza si algo en línea te parece sospechoso.',q:'¿Qué conviene hacer con una contraseña?',opts:['Compartirla públicamente','Mantenerla privada','Usar la misma en todos lados'],a:1,why:'Una contraseña debe mantenerse privada y ser difícil de adivinar.'}]}
 ];
-function renderAcademy(){let p=getProfile();$('profileSelect').value=p.level||'jóvenes';$('profileTitle').textContent='Nivel: '+(p.level||'jóvenes');$('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;$('progressBar').style.width=Math.min(100,p.done.length/lessons.reduce((n,c)=>n+c.items.length,0)*100)+'%';$('badges').innerHTML=(p.points>=50?'<span class="pill">🏅 Primer reto</span>':'')+(p.done.length>=5?'<span class="pill">📘 Curioso</span>':'')+(p.done.length>=10?'<span class="pill">🌟 Explorador</span>':'');let today=new Date().toISOString().slice(0,10);$('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';$('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];$('categories').innerHTML=lessons.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} lecciones</span></div><div id="cat${i}"></div></div>`).join('');lessons.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>`<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(i+'-'+j)?'✓ ':''}${l.title}</button>`).join('')});updateHome()}
+function renderAcademy(){let p=getProfile();$('profileSelect').value=p.level||'jóvenes';$('profileTitle').textContent='Nivel: '+(p.level||'jóvenes');$('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;$('progressBar').style.width=Math.min(100,p.done.length/lessons.reduce((n,c)=>n+c.items.length,0)*100)+'%';$('badges').innerHTML=(p.points>=50?'<span class="pill">🏅 Primer reto</span>':'')+(p.done.length>=5?'<span class="pill">📘 Curioso</span>':'')+(p.done.length>=10?'<span class="pill">🌟 Explorador</span>':'');let today=new Date().toISOString().slice(0,10);$('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';$('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];
+ $('dailyButton').classList.remove('hidden');$('categories').innerHTML=lessons.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} lecciones</span></div><div id="cat${i}"></div></div>`).join('');lessons.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>`<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(i+'-'+j)?'✓ ':''}${l.title}</button>`).join('')});updateHome()}
 function openLesson(i,j){let l=lessons[i].items[j];$('lessonArea').classList.remove('hidden');$('lessonArea').innerHTML=`<div class="row"><h2>${l.title}</h2><button class="back" onclick="$('lessonArea').classList.add('hidden')">Cerrar ✕</button></div><p class="muted">${l.body}</p><hr style="border-color:#29405f"><b>${l.q}</b><div id="lessonChoices"></div><p id="lessonFeedback" class="muted"></p>`;$('lessonChoices').innerHTML=l.opts.map((o,k)=>`<button class="choice" onclick="answerLesson(${i},${j},${k})">${String.fromCharCode(65+k)}. ${o}</button>`).join('');$('lessonArea').scrollIntoView({behavior:'smooth',block:'start'})}
 function answerLesson(i,j,k){let l=lessons[i].items[j],p=getProfile(),key=i+'-'+j,buttons=$('lessonChoices').querySelectorAll('button');buttons.forEach((b,n)=>{b.disabled=true;if(n===l.a)b.classList.add('correct');else if(n===k)b.classList.add('wrong')});if(k===l.a&&!p.done.includes(key)){p.done.push(key);p.points+=10;p.coins=(p.coins||0)+10;saveProfile(p);$('lessonFeedback').textContent='¡Correcto! +10 puntos. '+l.why}else if(k===l.a){$('lessonFeedback').textContent='¡Correcto! Ya habías completado esta lección. '+l.why}else{$('lessonFeedback').textContent='No pasa nada. La respuesta correcta está marcada. '+l.why}renderAcademy()}
 const dailyBank=[
@@ -248,8 +249,8 @@ const adultDailyBank=[
 ];
 function renderAcademy(){
  let p=getProfile(),bank=getLessonsForProfile(),g=getAgeGroup(p),total=bank.reduce((n,c)=>n+c.items.length,0);
- $('profileSelect').value=g;
- $('profileTitle').textContent='Grupo: '+(g==='niños'?'Niños (5–12)':g==='adultos'?'Adultos (18+)':'Jóvenes (13–17)');
+ $('ageGroupLabel').textContent='Grupo: '+(g==='niños'?'Niños (5–12)':g==='adultos'?'Adultos (18+)':'Jóvenes (13–17)');
+ $('profileTitle').textContent='Contenido adaptado por edad';
  $('points').textContent=p.points;$('streak').textContent=p.streak;$('doneCount').textContent=p.done.length;
  let completed=p.done.filter(k=>k.startsWith('v35-'+g+'-')).length;
  $('progressBar').style.width=Math.min(100,completed/total*100)+'%';
@@ -257,6 +258,7 @@ function renderAcademy(){
  let today=new Date().toISOString().slice(0,10);
  $('dailyStatus').textContent=p.daily[today]?'¡Reto completado! Ganaste 50 puntos.':'Completa cinco preguntas para ganar 50 puntos.';
  $('dailyButton').textContent=p.daily[today]?'Reto completado':'Comenzar reto';$('dailyButton').disabled=!!p.daily[today];
+ $('dailyButton').classList.remove('hidden');
  $('categories').innerHTML=bank.map((c,i)=>`<div class="lesson"><div class="row"><b>${c.icon} ${c.cat}</b><span class="pill">${c.items.length} actividades</span></div><div id="cat${i}"></div></div>`).join('');
  bank.forEach((c,i)=>{$('cat'+i).innerHTML=c.items.map((l,j)=>{let key='v35-'+g+'-'+i+'-'+j;return `<button class="secondary small full" style="text-align:left;margin-top:7px" onclick="openLesson(${i},${j})">${p.done.includes(key)?'✓ ':''}${l.title}</button>`}).join('')});
  updateHome();
