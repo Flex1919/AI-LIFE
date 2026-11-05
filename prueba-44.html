@@ -1,0 +1,933 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071326">
+<title>AI LIFE 4.4 - Cosmos Studio Animado</title>
+
+<style>
+:root {
+  --bg: #071326;
+  --panel: #101f38;
+  --text: #f3f6ff;
+  --muted: #9aabc5;
+  --blue: #35a8ff;
+  --purple: #bb78ff;
+  --gold: #ffc857;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 0%, #18345d 0%, transparent 42%),
+    linear-gradient(160deg, #071326, #030916);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+button, input, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  width: min(1100px, 100%);
+  margin: auto;
+  padding: 20px 15px 35px;
+}
+
+header {
+  text-align: center;
+  padding: 18px 0 22px;
+}
+
+.version {
+  color: #73baff;
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: clamp(27px, 6vw, 43px);
+  margin: 12px 0 7px;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.section-title {
+  text-align: center;
+  margin: 22px 0 15px;
+  font-size: 19px;
+}
+
+.studio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.assistant {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #263b5b;
+  background: linear-gradient(160deg, #172b49, #0b172b);
+  border-radius: 20px;
+  padding: 16px 9px 15px;
+  text-align: center;
+  transition: .35s ease;
+  min-width: 0;
+}
+
+.assistant.active {
+  transform: translateY(-5px);
+  border-color: var(--color);
+  box-shadow: 0 0 25px color-mix(in srgb, var(--color) 45%, transparent);
+}
+
+.assistant.listening {
+  opacity: .82;
+}
+
+.assistant.active .avatar {
+  animation: float 1.5s ease-in-out infinite;
+}
+
+.assistant.active .mouth {
+  animation: talk .22s infinite alternate;
+}
+
+.assistant.active .eyes {
+  animation: blink 3s infinite;
+}
+
+.assistant.cosmos {
+  --color: var(--blue);
+}
+
+.assistant.mira {
+  --color: var(--purple);
+}
+
+.assistant.zoey {
+  --color: var(--gold);
+}
+
+.avatar {
+  width: 112px;
+  height: 135px;
+  margin: 0 auto 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.robot-head {
+  width: 91px;
+  height: 105px;
+  border-radius: 42% 42% 38% 38%;
+  position: relative;
+  background: linear-gradient(145deg, #e0edff, #8199ba 55%, #425b80);
+  border: 3px solid var(--color);
+  box-shadow: inset 0 -10px 20px #1a2b46,
+              0 0 18px color-mix(in srgb, var(--color) 40%, transparent);
+}
+
+.robot-head::before {
+  content: "";
+  position: absolute;
+  top: -17px;
+  left: 38px;
+  width: 12px;
+  height: 15px;
+  background: var(--color);
+  border-radius: 10px 10px 0 0;
+}
+
+.robot-head::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 27px;
+  width: 32px;
+  height: 12px;
+  background: #607a9e;
+  border-radius: 0 0 12px 12px;
+}
+
+.ears {
+  position: absolute;
+  top: 37px;
+  left: -9px;
+  width: 103px;
+  height: 24px;
+  border-left: 8px solid var(--color);
+  border-right: 8px solid var(--color);
+  border-radius: 8px;
+}
+
+.eyes {
+  position: absolute;
+  top: 34px;
+  left: 17px;
+  width: 51px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.eye {
+  width: 15px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color);
+  box-shadow: 0 0 10px var(--color);
+}
+
+.mouth {
+  position: absolute;
+  width: 29px;
+  height: 7px;
+  border-radius: 0 0 15px 15px;
+  background: #233d60;
+  border: 2px solid #d7eaff;
+  top: 64px;
+  left: 28px;
+}
+
+.body-robot {
+  position: absolute;
+  bottom: -4px;
+  width: 76px;
+  height: 27px;
+  background: linear-gradient(90deg, #304968, #a6bad2, #304968);
+  border-radius: 30px 30px 8px 8px;
+  border: 2px solid var(--color);
+}
+
+.assistant-name {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 8px 0 5px;
+  color: var(--color);
+}
+
+.role {
+  color: #bdcbe0;
+  font-size: 11px;
+  min-height: 27px;
+}
+
+.status {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  border-radius: 20px;
+  background: #071326;
+  padding: 6px;
+}
+
+.active .status {
+  color: var(--color);
+  font-weight: bold;
+}
+
+.speech-area {
+  margin-top: 23px;
+  border: 1px solid #263b5b;
+  background: rgba(13, 29, 52, .88);
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.mode-title {
+  text-align: center;
+  font-size: 14px;
+  color: #9fcaff;
+  margin-bottom: 13px;
+}
+
+.modes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.mode-btn {
+  border: 1px solid #405879;
+  color: white;
+  background: #142743;
+  padding: 11px 17px;
+  border-radius: 25px;
+}
+
+.mode-btn.selected {
+  background: #174b80;
+  border-color: #48aaff;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 390px;
+  overflow-y: auto;
+  padding: 5px 2px 15px;
+}
+
+.message {
+  border-radius: 13px;
+  padding: 13px;
+  background: #172b49;
+  border-left: 4px solid #8295ad;
+  line-height: 1.5;
+  font-size: 14px;
+  animation: appear .35s ease;
+}
+
+.message.user {
+  border-left-color: #ffffff;
+  background: #263a57;
+}
+
+.message.cosmos {
+  border-left-color: var(--blue);
+}
+
+.message.mira {
+  border-left-color: var(--purple);
+}
+
+.message.zoey {
+  border-left-color: var(--gold);
+}
+
+.message strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-area {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 53px;
+  max-height: 130px;
+  resize: vertical;
+  border: 1px solid #405879;
+  border-radius: 13px;
+  background: #071326;
+  color: white;
+  padding: 14px;
+  outline: none;
+}
+
+textarea:focus {
+  border-color: #48aaff;
+}
+
+.send-btn {
+  background: linear-gradient(135deg, #1888e8, #5d5aff);
+  color: white;
+  border: none;
+  border-radius: 13px;
+  padding: 0 19px;
+  font-weight: bold;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.control-btn {
+  background: #1b304f;
+  color: white;
+  border: 1px solid #405879;
+  border-radius: 12px;
+  padding: 11px 14px;
+}
+
+.control-btn:active, .send-btn:active {
+  transform: scale(.96);
+}
+
+.control-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.note {
+  text-align: center;
+  color: #879bb9;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 18px 4px;
+}
+
+.profile-btn {
+  display: block;
+  margin: 18px auto 0;
+  background: transparent;
+  color: #9fcaff;
+  border: 1px solid #405879;
+  border-radius: 20px;
+  padding: 10px 18px;
+}
+
+footer {
+  text-align: center;
+  color: #71849f;
+  font-size: 11px;
+  margin-top: 25px;
+  letter-spacing: 1px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes talk {
+  from { height: 5px; width: 25px; }
+  to { height: 15px; width: 31px; }
+}
+
+@keyframes blink {
+  0%, 44%, 48%, 100% { transform: scaleY(1); }
+  46% { transform: scaleY(.1); }
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  .studio {
+    gap: 7px;
+  }
+
+  .assistant {
+    padding: 12px 5px;
+    border-radius: 15px;
+  }
+
+  .avatar {
+    transform: scale(.82);
+    height: 112px;
+    margin-bottom: 2px;
+  }
+
+  .assistant.active .avatar {
+    animation: float 1.5s ease-in-out infinite;
+  }
+
+  .assistant-name {
+    font-size: 14px;
+  }
+
+  .role {
+    font-size: 10px;
+  }
+
+  .speech-area {
+    padding: 12px;
+  }
+
+  .send-btn {
+    padding: 0 13px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="version">AI LIFE 4.4 · COSMOS STUDIO</div>
+  <h1>🌌 MESA REDONDA</h1>
+  <div class="subtitle">Tres asistentes. Tres perspectivas. Una conversación.</div>
+</header>
+
+<h2 class="section-title">Nuestros asistentes</h2>
+
+<section class="studio">
+
+  <article class="assistant cosmos" id="card-cosmos">
+    <div class="avatar">
+      <div class="robot-head">
+        <div class="ears"></div>
+        <div class="eyes">
+          <div class="eye"></div>
+          <div class="eye"></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body-robot"></div>
+    </div>
+    <div class="assistant-name">🔵 COSMOS</div>
+    <div class="role">Análisis y soluciones</div>
+    <div class="status" id="status-cosmos">Disponible</div>
+  </article>
+
+  <article class="assistant mira" id="card-mira">
+    <div class="avatar">
+      <div class="robot-head">
+        <div class="ears"></div>
+        <div class="eyes">
+          <div class="eye"></div>
+          <div class="eye"></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body-robot"></div>
+    </div>
+    <div class="assistant-name">🟣 MIRA</div>
+    <div class="role">Creatividad y aprendizaje</div>
+    <div class="status" id="status-mira">Disponible</div>
+  </article>
+
+  <article class="assistant zoey" id="card-zoey">
+    <div class="avatar">
+      <div class="robot-head">
+        <div class="ears"></div>
+        <div class="eyes">
+          <div class="eye"></div>
+          <div class="eye"></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body-robot"></div>
+    </div>
+    <div class="assistant-name">🟡 ZOEY</div>
+    <div class="role">Investigación y cultura</div>
+    <div class="status" id="status-zoey">Disponible</div>
+  </article>
+
+</section>
+
+<section class="speech-area">
+
+  <div class="mode-title">¿Cómo quieres conversar?</div>
+
+  <div class="modes">
+    <button class="mode-btn selected" id="allMode" onclick="setMode('all')">
+      🌌 Los tres
+    </button>
+    <button class="mode-btn" id="oneMode" onclick="setMode('individual')">
+      👤 Individual
+    </button>
+  </div>
+
+  <div id="individualOptions" style="display:none;text-align:center;margin-bottom:15px">
+    <select id="assistantChoice"
+      style="background:#071326;color:white;padding:11px;border:1px solid #405879;border-radius:10px">
+      <option value="cosmos">🔵 Cosmos</option>
+      <option value="mira">🟣 Mira</option>
+      <option value="zoey">🟡 Zoey</option>
+    </select>
+  </div>
+
+  <div class="messages" id="messages" aria-live="polite">
+    <div class="message cosmos">
+      <strong>🔵 COSMOS</strong>
+      ¡Hola! Bienvenido a nuestro estudio. Puedes preguntarnos lo que quieras.
+    </div>
+    <div class="message mira">
+      <strong>🟣 MIRA</strong>
+      ¡Hola! Estoy lista para explorar nuevas ideas contigo.
+    </div>
+    <div class="message zoey">
+      <strong>🟡 ZOEY</strong>
+      ¡Hola! Estoy preparada para investigar y descubrir cosas interesantes.
+    </div>
+  </div>
+
+  <div class="input-area">
+    <textarea id="question" placeholder="Escribe tu pregunta..."></textarea>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">Enviar</button>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn" id="voiceBtn" onclick="startVoice()">
+      🎙️ Hablar
+    </button>
+    <button class="control-btn" onclick="readConversation()">
+      🔊 Escuchar
+    </button>
+    <button class="control-btn" onclick="stopEverything()">
+      ⏹ Detener
+    </button>
+  </div>
+
+</section>
+
+<p class="note">
+  Versión experimental 4.4. Las respuestas son demostrativas y las
+  animaciones son visuales. La conexión con inteligencia artificial real
+  requiere un servicio seguro independiente.
+</p>
+
+<button class="profile-btn" onclick="changeProfile()">
+  Cambiar perfil de prueba
+</button>
+
+<footer>
+  AI LIFE 4.4 · COSMOS STUDIO ANIMADO
+</footer>
+
+</div>
+
+<script>
+let mode = "all";
+let busy = false;
+let cancelled = false;
+let lastMessages = [];
+let recognition = null;
+
+const assistants = ["cosmos", "mira", "zoey"];
+
+function setMode(value) {
+  if (busy) return;
+
+  mode = value;
+
+  document.getElementById("allMode").classList.toggle(
+    "selected", value === "all"
+  );
+
+  document.getElementById("oneMode").classList.toggle(
+    "selected", value === "individual"
+  );
+
+  document.getElementById("individualOptions").style.display =
+    value === "individual" ? "block" : "none";
+}
+
+function setActive(name) {
+  assistants.forEach(id => {
+    const card = document.getElementById("card-" + id);
+    const status = document.getElementById("status-" + id);
+
+    card.classList.remove("active", "listening");
+
+    if (id === name) {
+      card.classList.add("active");
+      status.textContent = "● Hablando...";
+    } else {
+      card.classList.add("listening");
+      status.textContent = "Escuchando";
+    }
+  });
+}
+
+function resetActive() {
+  assistants.forEach(id => {
+    const card = document.getElementById("card-" + id);
+    card.classList.remove("active", "listening");
+    document.getElementById("status-" + id).textContent = "Disponible";
+  });
+}
+
+function addMessage(name, text, type) {
+  const messages = document.getElementById("messages");
+  const item = document.createElement("div");
+
+  item.className = "message " + type;
+
+  const title = document.createElement("strong");
+  title.textContent = name;
+
+  const content = document.createElement("div");
+  content.textContent = text;
+
+  item.appendChild(title);
+  item.appendChild(content);
+  messages.appendChild(item);
+
+  messages.scrollTop = messages.scrollHeight;
+
+  lastMessages.push({name, text, type});
+}
+
+function getTopic(question) {
+  const q = question.toLowerCase();
+
+  if (/famil|casa|hijo|hija|niño|niña|padre|madre|hogar/.test(q)) {
+    return "familia";
+  }
+
+  if (/estudi|escuela|colegio|aprend|tarea|educación/.test(q)) {
+    return "aprendizaje";
+  }
+
+  if (/tecnolog|computador|celular|internet|inteligencia artificial|ia /.test(q)) {
+    return "tecnologia";
+  }
+
+  if (/trabaj|negocio|empresa|dinero|proyecto/.test(q)) {
+    return "trabajo";
+  }
+
+  return "general";
+}
+
+function responseFor(question, role) {
+  const topic = getTopic(question);
+
+  const answers = {
+    familia: {
+      cosmos: "Empecemos por organizar las responsabilidades, establecer prioridades y crear una rutina sencilla que todos puedan comprender.",
+      mira: "Podríamos convertir las actividades diarias en pequeños retos familiares. Así organizarse también puede ser una experiencia divertida y participativa.",
+      zoey: "Conviene considerar los horarios, las edades y las necesidades de cada integrante. Una buena organización debe ser realista y flexible.",
+      conclusion: "La mejor propuesta es crear una rutina familiar compartida, distribuir las tareas de manera justa y reservar tiempo para descansar y disfrutar juntos."
+    },
+
+    aprendizaje: {
+      cosmos: "Mi propuesta es dividir el tema en objetivos pequeños y avanzar desde los conceptos básicos hasta los ejercicios prácticos.",
+      mira: "Podemos aprender mediante juegos, historias, ejemplos y pequeños desafíos. No todos aprendemos de la misma manera.",
+      zoey: "También es importante comprobar lo aprendido con preguntas variadas y consultar fuentes confiables cuando tengamos dudas.",
+      conclusion: "Combinemos explicaciones claras, práctica y actividades creativas. Después revisaremos los resultados para saber qué debemos reforzar."
+    },
+
+    tecnologia: {
+      cosmos: "Primero debemos identificar qué problema queremos resolver y elegir una herramienta tecnológica que realmente aporte valor.",
+      mira: "Podríamos explorar varias alternativas y diseñar una experiencia sencilla, visual y agradable para las personas.",
+      zoey: "Antes de elegir, conviene revisar las funciones, la privacidad, la seguridad y la confiabilidad de cada alternativa.",
+      conclusion: "La tecnología debe resolver una necesidad concreta. Elijamos una opción útil, segura y fácil de utilizar."
+    },
+
+    trabajo: {
+      cosmos: "Recomiendo establecer un objetivo, identificar las tareas prioritarias y organizar un plan con pasos medibles.",
+      mira: "Podemos buscar formas diferentes de presentar la propuesta y encontrar oportunidades que todavía no hemos considerado.",
+      zoey: "Necesitamos contrastar los datos, revisar los recursos disponibles y evaluar los posibles riesgos antes de decidir.",
+      conclusion: "Unamos planificación, creatividad y verificación. Así tendremos una propuesta más sólida y podremos evaluar sus resultados."
+    },
+
+    general: {
+      cosmos: "Mi propuesta es analizar el objetivo, dividirlo en pasos pequeños y comenzar por la acción más importante.",
+      mira: "Quiero explorar distintas posibilidades. Una idea diferente puede abrir caminos que todavía no hemos considerado.",
+      zoey: "Mi recomendación es identificar qué sabemos, qué información nos falta y cómo podemos comprobarla.",
+      conclusion: "Combinemos las ideas útiles, revisemos la información y construyamos una solución que podamos llevar a la práctica."
+    }
+  };
+
+  return answers[topic][role];
+}
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function speakOne(text) {
+  if (!window.speechSynthesis) return;
+
+  return new Promise(resolve => {
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "es-CO";
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+
+    utterance.onend = resolve;
+    utterance.onerror = resolve;
+
+    window.speechSynthesis.speak(utterance);
+
+    setTimeout(resolve, Math.max(5000, text.length * 95));
+  });
+}
+
+async function sendMessage() {
+  if (busy) return;
+
+  const input = document.getElementById("question");
+  const question = input.value.trim();
+
+  if (!question) {
+    input.focus();
+    return;
+  }
+
+  busy = true;
+  cancelled = false;
+  lastMessages = [];
+
+  document.getElementById("sendBtn").disabled = true;
+  addMessage("TÚ", question, "user");
+  input.value = "";
+
+  const turns = mode === "all"
+    ? ["cosmos", "mira", "zoey", "conclusion"]
+    : [document.getElementById("assistantChoice").value];
+
+  const names = {
+    cosmos: "🔵 COSMOS",
+    mira: "🟣 MIRA",
+    zoey: "🟡 ZOEY",
+    conclusion: "🔵 COSMOS · CONCLUSIÓN"
+  };
+
+  for (const role of turns) {
+    if (cancelled) break;
+
+    const speaker = role === "conclusion" ? "cosmos" : role;
+    setActive(speaker);
+
+    await wait(700);
+    if (cancelled) break;
+
+    const answer = responseFor(question, role);
+    addMessage(names[role], answer, speaker);
+
+    await wait(900);
+    if (cancelled) break;
+  }
+
+  resetActive();
+  busy = false;
+  document.getElementById("sendBtn").disabled = false;
+}
+
+function readConversation() {
+  if (!window.speechSynthesis) {
+    alert("Tu navegador no permite lectura de voz.");
+    return;
+  }
+
+  stopEverything();
+
+  const allText = lastMessages
+    .map(item => item.name + ". " + item.text)
+    .join(". ");
+
+  if (!allText) {
+    alert("Primero escribe una pregunta.");
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(allText);
+  utterance.lang = "es-CO";
+  utterance.rate = 0.95;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function stopEverything() {
+  cancelled = true;
+
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+
+  if (recognition) {
+    try {
+      recognition.stop();
+    } catch(e) {}
+  }
+
+  resetActive();
+}
+
+function startVoice() {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("El reconocimiento de voz no está disponible en este navegador. Puedes escribir tu pregunta.");
+    return;
+  }
+
+  if (busy) {
+    alert("Espera a que termine la conversación.");
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "es-CO";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  document.getElementById("voiceBtn").textContent = "🎙️ Escuchando...";
+
+  recognition.onresult = event => {
+    document.getElementById("question").value =
+      event.results[0][0].transcript;
+  };
+
+  recognition.onerror = () => {
+    alert("No pudimos reconocer la voz. Intenta nuevamente o escribe tu pregunta.");
+  };
+
+  recognition.onend = () => {
+    document.getElementById("voiceBtn").textContent = "🎙️ Hablar";
+  };
+
+  recognition.start();
+}
+
+function changeProfile() {
+  if (busy) {
+    alert("Espera a que termine la conversación.");
+    return;
+  }
+
+  const name = prompt("Nombre del perfil de prueba:");
+  if (name && name.trim()) {
+    localStorage.setItem(
+      "ailife44_studio_profile",
+      JSON.stringify({name: name.trim()})
+    );
+
+    alert("Perfil de prueba actualizado.");
+  }
+}
+
+document.getElementById("question").addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+(function loadProfile() {
+  try {
+    const profile = JSON.parse(
+      localStorage.getItem("ailife44_studio_profile") || "null"
+    );
+
+    if (profile && profile.name) {
+      document.querySelector("header .subtitle").textContent =
+        "Bienvenido, " + profile.name + ". Tres asistentes, una conversación.";
+    }
+  } catch(e) {}
+})();
+</script>
+
+</body>
+</html>
