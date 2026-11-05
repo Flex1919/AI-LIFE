@@ -1,0 +1,591 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071426">
+<title>AI LIFE 4.3 - Mesa Redonda</title>
+<style>
+:root {
+ --bg:#06101f;
+ --panel:#101f35;
+ --blue:#62b7ff;
+ --purple:#c39aff;
+ --gold:#ffd36e;
+ --cyan:#62e5dc;
+ --white:#f4f8ff;
+ --muted:#a9bad2;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:radial-gradient(ellipse at top,#17365d,#06101f 70%);
+ color:var(--white);
+ font-family:Arial,sans-serif;
+ min-height:100vh;
+}
+button,input,select{font:inherit}
+button{
+ border:0;
+ border-radius:12px;
+ padding:13px;
+ color:white;
+ background:#24466c;
+ cursor:pointer;
+}
+button:disabled{opacity:.5}
+input,select{
+ width:100%;
+ padding:13px;
+ border-radius:10px;
+ border:1px solid #34506e;
+ background:#09172a;
+ color:white;
+ margin:7px 0 14px;
+}
+header{
+ padding:17px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ border-bottom:1px solid #29405f;
+}
+.brand{font-size:20px;font-weight:bold}
+.brand span{color:var(--cyan)}
+main{max-width:950px;margin:auto;padding:16px}
+.panel{
+ background:#101f35ef;
+ border:1px solid #29405f;
+ border-radius:18px;
+ padding:18px;
+ margin:14px 0;
+}
+.hidden{display:none!important}
+.center{text-align:center}
+.muted{color:var(--muted);line-height:1.5}
+.pill{
+ display:inline-block;
+ border:1px solid #345b80;
+ border-radius:30px;
+ padding:6px 11px;
+ color:var(--cyan);
+ font-size:12px;
+}
+.primary{
+ background:linear-gradient(100deg,#167fc5,#2662ad);
+}
+.full{width:100%}
+h1,h2,h3{margin-top:8px}
+.studio{
+ background:radial-gradient(ellipse at center,#173b63,#071426 75%);
+ border:1px solid #31577e;
+ border-radius:22px;
+ padding:15px;
+}
+.team-image{
+ width:100%;
+ max-height:320px;
+ object-fit:contain;
+ border-radius:15px;
+ display:block;
+ margin:auto;
+}
+.assistants{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:9px;
+ margin-top:15px;
+}
+.assistant{
+ background:#152944;
+ border:1px solid #34506e;
+ padding:12px 5px;
+ font-weight:bold;
+}
+.assistant small{
+ display:block;
+ font-size:10px;
+ color:#c4d5e9;
+ margin-top:5px;
+}
+.cosmos{border-color:var(--blue)}
+.mira{border-color:var(--purple)}
+.zoey{border-color:var(--gold)}
+.status{
+ text-align:center;
+ color:var(--cyan);
+ font-size:13px;
+ padding:10px;
+}
+.chatlog{
+ min-height:260px;
+ max-height:480px;
+ overflow:auto;
+ background:#081629;
+ border:1px solid #29405f;
+ border-radius:14px;
+ padding:12px;
+}
+.bubble{
+ padding:12px;
+ border-radius:14px;
+ margin:10px 0;
+ line-height:1.5;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+}
+.user{
+ background:#185a63;
+ margin-left:12%;
+}
+.bot{
+ background:#183454;
+ border:1px solid #31577e;
+ margin-right:8%;
+}
+.bot.cosmos{border-left:4px solid var(--blue)}
+.bot.mira{border-left:4px solid var(--purple)}
+.bot.zoey{border-left:4px solid var(--gold)}
+.speaker{
+ font-size:12px;
+ font-weight:bold;
+ margin-bottom:5px;
+}
+.input-row{
+ display:flex;
+ gap:8px;
+ margin-top:12px;
+}
+.input-row input{margin:0;min-width:0}
+.mode{
+ display:flex;
+ gap:8px;
+ margin:12px 0;
+}
+.mode button{flex:1}
+.mode button.active{
+ background:#167fc5;
+ border:1px solid var(--cyan);
+}
+footer{
+ text-align:center;
+ color:#8298b5;
+ font-size:11px;
+ padding:22px;
+}
+@media(max-width:520px){
+ header{flex-wrap:wrap}
+ .assistants{gap:5px}
+ .assistant{font-size:11px;padding:10px 3px}
+ .assistant small{font-size:9px}
+ .input-row{flex-wrap:wrap}
+ .input-row input{flex-basis:100%}
+ .input-row button{flex:1}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="brand">AI <span>LIFE</span> 4.3</div>
+ <span class="pill">COSMOS STUDIO · MESA REDONDA</span>
+</header>
+
+<main>
+
+<section id="welcome" class="panel center">
+ <div class="pill">NUEVA GENERACIÓN</div>
+ <h1>Bienvenido a COSMOS STUDIO</h1>
+ <p class="muted">
+ Tres asistentes, una conversación y diferentes puntos de vista.
+ </p>
+ <button class="primary full" onclick="openProfile()">
+ COMENZAR
+ </button>
+ <p class="muted">
+ Entorno independiente de las versiones 4.1 y 4.2.
+ </p>
+</section>
+
+<section id="profile" class="panel hidden">
+ <h2>Crear perfil de prueba</h2>
+ <label>Nombre</label>
+ <input id="profileName" maxlength="24" placeholder="Tu nombre">
+ <label>Edad o etapa</label>
+ <select id="profileAge">
+  <option value="niños">Niños</option>
+  <option value="jóvenes">Jóvenes</option>
+  <option value="adultos">Adultos</option>
+ </select>
+ <button class="primary full" onclick="createProfile()">
+ CREAR PERFIL
+ </button>
+</section>
+
+<section id="studioPage" class="hidden">
+
+ <div class="panel">
+  <div class="pill">TU ESPACIO PERSONAL</div>
+  <h2 id="hello">Hola</h2>
+  <p class="muted">
+  Hoy puedes conversar con un asistente o reunir a los tres.
+  </p>
+ </div>
+
+ <div class="studio">
+  <h2 class="center">COSMOS STUDIO</h2>
+
+  <img class="team-image"
+       src="./cosmos-studio.png"
+       alt="Cosmos, Mira y Zoey"
+       onerror="this.style.display='none'">
+
+  <div class="assistants">
+   <div class="assistant cosmos center">
+    🔵 COSMOS
+    <small>Análisis y soluciones</small>
+   </div>
+   <div class="assistant mira center">
+    🟣 MIRA
+    <small>Creatividad y aprendizaje</small>
+   </div>
+   <div class="assistant zoey center">
+    🟡 ZOEY
+    <small>Investigación y cultura</small>
+   </div>
+  </div>
+
+  <div id="status" class="status">
+   Los tres asistentes están listos.
+  </div>
+ </div>
+
+ <div class="panel">
+  <h3>¿Cómo quieres conversar?</h3>
+  <div class="mode">
+   <button id="allMode" class="active" onclick="setMode('all')">
+    🌌 Los tres
+   </button>
+   <button id="singleMode" onclick="setMode('single')">
+    👤 Individual
+   </button>
+  </div>
+
+  <div id="singleChoice" class="hidden">
+   <label>Selecciona un asistente</label>
+   <select id="singleAssistant">
+    <option value="cosmos">🔵 Cosmos</option>
+    <option value="mira">🟣 Mira</option>
+    <option value="zoey">🟡 Zoey</option>
+   </select>
+  </div>
+
+  <div id="chatlog" class="chatlog">
+   <div class="bubble bot cosmos">
+    <div class="speaker">🔵 COSMOS</div>
+    ¡Hola! Bienvenido a nuestro estudio. Puedes preguntarnos lo que quieras.
+   </div>
+   <div class="bubble bot mira">
+    <div class="speaker">🟣 MIRA</div>
+    ¡Hola! Estoy lista para explorar nuevas ideas contigo.
+   </div>
+   <div class="bubble bot zoey">
+    <div class="speaker">🟡 ZOEY</div>
+    ¡Hola! Estoy preparada para investigar y descubrir cosas interesantes.
+   </div>
+  </div>
+
+  <div class="input-row">
+   <input id="message"
+          maxlength="1500"
+          placeholder="Escribe tu pregunta..."
+          onkeydown="if(event.key==='Enter')sendMessage()">
+   <button class="primary" onclick="sendMessage()">Enviar</button>
+  </div>
+
+  <div class="input-row">
+   <button onclick="startVoice()">🎙️ Hablar</button>
+   <button onclick="speakLast()">🔊 Escuchar</button>
+   <button onclick="stopVoice()">⏹ Detener</button>
+  </div>
+
+  <p class="muted center">
+   Versión experimental: las respuestas son demostrativas.
+   La conexión a inteligencia artificial real se añadirá mediante
+   un servidor seguro.
+  </p>
+ </div>
+
+ <button class="full" onclick="changeProfile()">
+ Cambiar perfil de prueba
+ </button>
+
+</section>
+</main>
+
+<footer>
+ AI LIFE 4.3 · COSMOS STUDIO · MESA REDONDA
+</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+
+const assistants={
+ cosmos:{
+  name:"Cosmos",
+  css:"cosmos",
+  intro:"Soy Cosmos. Voy a organizar la conversación y ayudarte a encontrar soluciones."
+ },
+ mira:{
+  name:"Mira",
+  css:"mira",
+  intro:"Soy Mira. Me enfoco en las ideas, la creatividad y el aprendizaje."
+ },
+ zoey:{
+  name:"Zoey",
+  css:"zoey",
+  intro:"Soy Zoey. Me enfoco en la investigación, la cultura y los datos."
+ }
+};
+
+let mode="all";
+let lastAnswer="";
+let recognition=null;
+let busy=false;
+
+function openProfile(){
+ $("welcome").classList.add("hidden");
+ $("profile").classList.remove("hidden");
+}
+
+function createProfile(){
+ const name=$("profileName").value.trim();
+ const age=$("profileAge").value;
+
+ if(!name){
+  alert("Escribe tu nombre.");
+  return;
+ }
+
+ const profile={
+  name:name,
+  age:age,
+  created:new Date().toISOString()
+ };
+
+ localStorage.setItem(
+  "ailife43_studio_profile",
+  JSON.stringify(profile)
+ );
+
+ $("hello").textContent="¡Hola, "+name+"!";
+ $("profile").classList.add("hidden");
+ $("studioPage").classList.remove("hidden");
+ $("status").textContent="Los tres asistentes están listos.";
+}
+
+function changeProfile(){
+ $("studioPage").classList.add("hidden");
+ $("profile").classList.remove("hidden");
+ $("profileName").value="";
+}
+
+function setMode(value){
+ mode=value;
+
+ $("allMode").classList.toggle("active",value==="all");
+ $("singleMode").classList.toggle("active",value==="single");
+
+ $("singleChoice").classList.toggle(
+  "hidden",
+  value!=="single"
+ );
+
+ $("status").textContent=
+  value==="all"
+  ?"Mesa Redonda activada: participan los tres."
+  :"Modo individual activado.";
+}
+
+function addBubble(message,type,who){
+ const d=document.createElement("div");
+ d.className="bubble "+type+(who?" "+who:"");
+
+ if(type==="bot"){
+  const title=document.createElement("div");
+  title.className="speaker";
+  title.textContent=
+   assistants[who].name.toUpperCase();
+  d.appendChild(title);
+ }
+
+ const content=document.createElement("div");
+ content.textContent=message;
+ d.appendChild(content);
+
+ $("chatlog").appendChild(d);
+ $("chatlog").scrollTop=$("chatlog").scrollHeight;
+}
+
+function responseFor(who,q){
+ const s=q.toLowerCase();
+
+ if(who==="cosmos"){
+  if(s.includes("organizar")||s.includes("tarea")){
+   return "Mi propuesta es dividir el objetivo en pasos pequeños, ordenar las prioridades y comenzar por la acción más importante.";
+  }
+  if(s.includes("inteligencia artificial")||s.includes("qué es ia")){
+   return "La inteligencia artificial permite que los sistemas analicen información, reconozcan patrones y generen respuestas. Es importante verificar sus resultados.";
+  }
+  return "Mi enfoque es analizar el problema, identificar qué necesitamos resolver y plantear una solución clara y práctica.";
+ }
+
+ if(who==="mira"){
+  if(s.includes("historia")||s.includes("cuento")){
+   return "¡Podemos convertir esa idea en una historia! Pensemos en un personaje, un escenario especial y un desafío que deba superar.";
+  }
+  if(s.includes("estudiar")||s.includes("aprender")){
+   return "Propongo aprender mediante tres pasos: explicación sencilla, ejemplo práctico y una actividad corta para comprobar lo aprendido.";
+  }
+  return "Quiero explorar distintas posibilidades. A veces una idea diferente permite encontrar una solución que no habíamos considerado.";
+ }
+
+ if(who==="zoey"){
+  if(s.includes("cine")||s.includes("película")||s.includes("música")){
+   return "Podemos estudiar el contexto, los protagonistas, los estilos y los datos interesantes de ese tema.";
+  }
+  if(s.includes("investigar")||s.includes("noticia")){
+   return "Para investigar necesitamos contrastar fuentes confiables, revisar las fechas y separar los hechos de las opiniones.";
+  }
+  return "Mi recomendación es identificar qué sabemos, qué información nos falta y cómo podemos comprobarla.";
+ }
+}
+
+function sendMessage(){
+ if(busy)return;
+
+ const input=$("message");
+ const q=input.value.trim();
+
+ if(!q)return;
+
+ input.value="";
+ addBubble(q,"user");
+ busy=true;
+
+ const participants=
+  mode==="all"
+  ?["cosmos","mira","zoey"]
+  :[$("singleAssistant").value];
+
+ const answers=[];
+
+ participants.forEach((who,index)=>{
+  answers.push({
+   who:who,
+   text:responseFor(who,q)
+  });
+ });
+
+ let index=0;
+
+ $("status").textContent="La mesa está conversando...";
+
+ function next(){
+  if(index>=answers.length){
+   if(mode==="all"){
+    const conclusion=
+     "Conclusión de la mesa: analicemos el objetivo, combinemos las ideas útiles y comprobemos la información antes de tomar una decisión.";
+    lastAnswer=conclusion;
+    addBubble(conclusion,"bot","cosmos");
+   }
+
+   busy=false;
+   $("status").textContent="La conversación ha terminado. Puedes continuar.";
+   return;
+  }
+
+  const item=answers[index];
+  lastAnswer=item.text;
+
+  addBubble(item.text,"bot",item.who);
+  index++;
+
+  setTimeout(next,650);
+ }
+
+ next();
+}
+
+function speakLast(){
+ if(!lastAnswer){
+  $("status").textContent="Primero inicia una conversación.";
+  return;
+ }
+
+ if(!("speechSynthesis" in window)){
+  $("status").textContent="La voz no está disponible.";
+  return;
+ }
+
+ speechSynthesis.cancel();
+
+ const speech=new SpeechSynthesisUtterance(lastAnswer);
+ speech.lang="es-CO";
+
+ speech.onstart=()=>{
+  $("status").textContent="El asistente está hablando...";
+ };
+
+ speech.onend=()=>{
+  $("status").textContent="Terminó de hablar.";
+ };
+
+ speechSynthesis.speak(speech);
+}
+
+function startVoice(){
+ const Speech=
+  window.SpeechRecognition||
+  window.webkitSpeechRecognition;
+
+ if(!Speech){
+  $("status").textContent="El dictado no está disponible en este navegador.";
+  return;
+ }
+
+ recognition=new Speech();
+ recognition.lang="es-CO";
+
+ recognition.onstart=()=>{
+  $("status").textContent="Te estamos escuchando...";
+ };
+
+ recognition.onresult=e=>{
+  $("message").value=e.results[0][0].transcript;
+  $("status").textContent="Ya te escuchamos. Pulsa Enviar.";
+ };
+
+ recognition.onerror=()=>{
+  $("status").textContent="No se reconoció la voz. Inténtalo otra vez.";
+ };
+
+ recognition.start();
+}
+
+function stopVoice(){
+ if(recognition){
+  recognition.stop();
+ }
+
+ if("speechSynthesis" in window){
+  speechSynthesis.cancel();
+ }
+
+ $("status").textContent="Voz detenida.";
+}
+</script>
+</body>
+</html>
