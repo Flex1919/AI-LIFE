@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071326">
+<title>AI LIFE 4.6 - Cosmos Studio</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#050b18;
+ color:#fff;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:22px 16px;
+ text-align:center;
+ background:linear-gradient(120deg,#071a38,#171044,#251039);
+ border-bottom:1px solid #34466b;
+}
+header h1{margin:0;color:#72baff;font-size:27px}
+header p{color:#c4cde0;margin:8px 0 0}
+main{max-width:950px;margin:auto;padding:16px}
+.studio{
+ position:relative;
+ overflow:hidden;
+ border:1px solid #365b91;
+ border-radius:20px;
+ background:#101c32;
+ box-shadow:0 0 30px #1451a455;
+}
+.studio img{
+ display:block;
+ width:100%;
+ min-height:220px;
+ object-fit:cover;
+}
+.image-fallback{
+ display:none;
+ padding:55px 15px;
+ text-align:center;
+ background:radial-gradient(circle,#243d69,#091326);
+}
+.image-fallback h2{color:#8acaff}
+.studio-caption{
+ padding:14px;
+ text-align:center;
+ background:#091326;
+ color:#9fcfff;
+ letter-spacing:2px;
+ font-weight:bold;
+}
+.people{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+ margin:18px 0;
+}
+.person{
+ border:1px solid #34415c;
+ border-radius:15px;
+ padding:14px 8px;
+ text-align:center;
+ background:#101a2b;
+ transition:.25s;
+}
+.person.active{
+ border:2px solid #fff;
+ transform:translateY(-4px);
+ box-shadow:0 0 22px #65aaff88;
+}
+.person .symbol{font-size:30px}
+.person h3{margin:7px 0 4px}
+.person p{font-size:12px;color:#b8c5d9;margin:0}
+.cosmos{color:#65baff}
+.mira{color:#d29aff}
+.zoey{color:#ffd36d}
+.panel{
+ padding:18px;
+ background:#101a2b;
+ border:1px solid #2d4163;
+ border-radius:16px;
+ margin-top:15px;
+}
+label{display:block;margin-bottom:9px;color:#b9d8ff}
+textarea{
+ width:100%;
+ min-height:100px;
+ resize:vertical;
+ border:1px solid #405779;
+ border-radius:12px;
+ padding:13px;
+ background:#071326;
+ color:white;
+ font-size:16px;
+}
+button,select{
+ border:1px solid #45648d;
+ border-radius:10px;
+ padding:12px;
+ background:#172b49;
+ color:white;
+ font-size:14px;
+}
+button{cursor:pointer}
+button.primary{
+ background:linear-gradient(100deg,#0879d5,#6543bd);
+ border:0;
+ font-weight:bold;
+}
+.controls{
+ display:flex;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-top:12px;
+}
+.controls button{flex:1}
+.response{
+ padding:13px;
+ border-left:3px solid #5aaaff;
+ background:#0a1425;
+ border-radius:8px;
+ margin-top:12px;
+ line-height:1.5;
+}
+.response strong{color:#85c7ff}
+.status{
+ color:#a8c9f5;
+ font-size:13px;
+ margin-top:12px;
+}
+.small{font-size:12px;color:#94a5bd;line-height:1.5}
+footer{text-align:center;color:#7185a5;padding:25px 10px}
+@media(max-width:520px){
+ .people{gap:6px}
+ .person{padding:12px 4px}
+ .person h3{font-size:14px}
+ .person p{font-size:10px}
+ .controls button{min-width:40%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <h1>∞ AI LIFE</h1>
+ <p>4.6 · COSMOS STUDIO</p>
+</header>
+
+<main>
+
+ <section class="studio">
+  <img src="./cosmos-studio.png"
+       alt="Cosmos, Mira y Zoey en su estudio"
+       onerror="this.style.display='none';document.querySelector('.image-fallback').style.display='block'">
+  <div class="image-fallback">
+   <h2>COSMOS STUDIO</h2>
+   <p>Cosmos · Mira · Zoey</p>
+   <p>Conversamos · Aprendemos · Jugamos</p>
+  </div>
+  <div class="studio-caption">
+   COSMOS STUDIO · MESA REDONDA
+  </div>
+ </section>
+
+ <section class="people">
+  <div class="person" id="card-cosmos">
+   <div class="symbol cosmos">🔵</div>
+   <h3 class="cosmos">COSMOS</h3>
+   <p>Analiza · Explica · Resuelve</p>
+  </div>
+  <div class="person" id="card-mira">
+   <div class="symbol mira">🟣</div>
+   <h3 class="mira">MIRA</h3>
+   <p>Crea · Enseña · Inspira</p>
+  </div>
+  <div class="person" id="card-zoey">
+   <div class="symbol zoey">🟡</div>
+   <h3 class="zoey">ZOEY</h3>
+   <p>Investiga · Descubre · Propone</p>
+  </div>
+ </section>
+
+ <section class="panel">
+  <h2>¿De qué queremos conversar?</h2>
+  <label for="question">Escribe un tema o pregunta</label>
+  <textarea id="question" placeholder="Ejemplo: ¿Cómo está cambiando la inteligencia artificial el mundo?"></textarea>
+
+  <div class="controls">
+   <button class="primary" onclick="startConversation()">▶ Iniciar conversación</button>
+   <button onclick="stopConversation()">■ Detener</button>
+  </div>
+
+  <div class="controls">
+   <button onclick="pauseSpeech()">Ⅱ Pausar</button>
+   <button onclick="resumeSpeech()">▶ Continuar</button>
+   <button onclick="repeatSpeech()">↻ Repetir turno</button>
+  </div>
+
+  <p class="status" id="status">Los tres asistentes están listos.</p>
+ </section>
+
+ <section class="panel">
+  <h2>🎙️ Configuración de voces</h2>
+  <p class="small">Selecciona las voces disponibles en tu teléfono. La variedad depende del navegador y de Android.</p>
+
+  <label for="voice-cosmos">Voz de Cosmos</label>
+  <select id="voice-cosmos"></select>
+
+  <label for="voice-mira" style="margin-top:15px">Voz de Mira</label>
+  <select id="voice-mira"></select>
+
+  <label for="voice-zoey" style="margin-top:15px">Voz de Zoey</label>
+  <select id="voice-zoey"></select>
+
+  <label for="speed" style="margin-top:15px">Velocidad de voz</label>
+  <select id="speed">
+   <option value="0.85">Lenta</option>
+   <option value="1" selected>Normal</option>
+   <option value="1.1">Rápida</option>
+  </select>
+ </section>
+
+ <section class="panel">
+  <h2>💬 Conversación</h2>
+  <div id="transcript">
+   <p class="small">Aquí aparecerá la transcripción de lo que dicen los asistentes.</p>
+  </div>
+ </section>
+
+ <section class="panel">
+  <h2>Acerca de esta versión</h2>
+  <p class="small">
+   AI LIFE 4.6 es una prueba independiente de Cosmos Studio.
+   Las respuestas son demostrativas y la voz utiliza la función de síntesis
+   de voz del navegador. Todavía no existe conexión con un modelo de IA
+   ni sincronización avanzada de labios.
+  </p>
+ </section>
+
+</main>
+
+<footer>AI LIFE · COSMOS STUDIO · 4.6</footer>
+
+<script>
+const assistants = [
+ {
+  id:"cosmos",
+  name:"COSMOS",
+  role:"Análisis y soluciones",
+  color:"#65baff"
+ },
+ {
+  id:"mira",
+  name:"MIRA",
+  role:"Creatividad y aprendizaje",
+  color:"#d29aff"
+ },
+ {
+  id:"zoey",
+  name:"ZOEY",
+  role:"Investigación y cultura",
+  color:"#ffd36d"
+ }
+];
+
+let voices=[];
+let conversation=[];
+let currentIndex=0;
+let currentText="";
+let running=false;
+let conversationId=0;
+
+function loadVoices(){
+ if(!("speechSynthesis" in window)){
+  document.getElementById("status").textContent=
+   "Este navegador no permite reproducir voces.";
+  return;
+ }
+
+ voices=speechSynthesis.getVoices();
+
+ assistants.forEach(person=>{
+  const select=document.getElementById("voice-"+person.id);
+  const previous=select.value;
+  select.innerHTML="";
+
+  const spanish=voices.filter(v=>v.lang.toLowerCase().startsWith("es"));
+  const available=spanish.length?spanish:voices;
+
+  if(!available.length){
+   const option=document.createElement("option");
+   option.textContent="Voces no disponibles todavía";
+   select.appendChild(option);
+   return;
+  }
+
+  available.forEach((voice,index)=>{
+   const option=document.createElement("option");
+   option.value=voice.name;
+   option.textContent=voice.name+" ("+voice.lang+")";
+   select.appendChild(option);
+  });
+
+  if(previous && available.some(v=>v.name===previous)){
+   select.value=previous;
+  }else if(available.length){
+   select.selectedIndex=assistants.indexOf(person)%available.length;
+  }
+ });
+}
+
+if("speechSynthesis" in window){
+ loadVoices();
+ speechSynthesis.onvoiceschanged=loadVoices;
+}
+
+function buildResponses(question){
+ return [
+  "Soy Cosmos. Vamos a analizar tu pregunta: "+question+
+  ". Mi propuesta es dividir el tema en partes, comprender sus fundamentos y buscar soluciones prácticas. ¿Qué opinan ustedes?",
+
+  "¡Hola! Soy Mira. Me gusta la propuesta de Cosmos. Podemos aprender este tema de una manera más creativa: con ejemplos, actividades y situaciones de la vida cotidiana. Así será mucho más fácil comprenderlo.",
+
+  "Soy Zoey. Quiero añadir algo: también es importante investigar, contrastar información y descubrir diferentes perspectivas. Mi propuesta es convertir este tema en un pequeño desafío para seguir aprendiendo."
+ ];
+}
+
+function addTranscript(person,text){
+ const area=document.getElementById("transcript");
+ const empty=area.querySelector(".small");
+ if(empty) empty.remove();
+
+ const div=document.createElement("div");
+ div.className="response";
+
+ const strong=document.createElement("strong");
+ strong.textContent=person.name+" · "+person.role;
+
+ const paragraph=document.createElement("p");
+ paragraph.textContent=text;
+
+ div.appendChild(strong);
+ div.appendChild(paragraph);
+ area.appendChild(div);
+}
+
+function highlight(person){
+ assistants.forEach(item=>{
+  document.getElementById("card-"+item.id).classList.remove("active");
+ });
+ document.getElementById("card-"+person.id).classList.add("active");
+}
+
+function startConversation(){
+ if(!("speechSynthesis" in window)){
+  document.getElementById("status").textContent=
+   "Tu navegador no admite reproducción de voz.";
+  return;
+ }
+
+ const question=document.getElementById("question").value.trim();
+
+ if(!question){
+  document.getElementById("status").textContent=
+   "Primero escribe una pregunta o un tema.";
+  return;
+ }
+
+ speechSynthesis.cancel();
+ conversationId++;
+ const thisConversation=conversationId;
+
+ conversation=buildResponses(question);
+ currentIndex=0;
+ running=true;
+
+ document.getElementById("transcript").innerHTML="";
+ speakNext(thisConversation);
+}
+
+function speakNext(id){
+ if(!running || id!==conversationId) return;
+
+ if(currentIndex>=assistants.length){
+  running=false;
+  assistants.forEach(person=>{
+   document.getElementById("card-"+person.id).classList.remove("active");
+  });
+  document.getElementById("status").textContent=
+   "La mesa redonda ha terminado. ¡Los tres participaron!";
+  return;
+ }
+
+ const person=assistants[currentIndex];
+ currentText=conversation[currentIndex];
+
+ highlight(person);
+ addTranscript(person,currentText);
+
+ document.getElementById("status").textContent=
+  person.name+" está hablando...";
+
+ const utterance=new SpeechSynthesisUtterance(currentText);
+ utterance.lang="es-ES";
+ utterance.rate=Number(document.getElementById("speed").value);
+ utterance.pitch=1;
+
+ const selectedVoice=document.getElementById("voice-"+person.id).value;
+ const voice=voices.find(v=>v.name===selectedVoice);
+ if(voice) utterance.voice=voice;
+
+ utterance.onend=()=>{
+  if(!running || id!==conversationId) return;
+  currentIndex++;
+  speakNext(id);
+ };
+
+ utterance.onerror=(event)=>{
+  if(id!==conversationId) return;
+  document.getElementById("status").textContent=
+   "No se pudo reproducir esta voz. Comprueba el audio del teléfono.";
+  running=false;
+ };
+
+ speechSynthesis.speak(utterance);
+}
+
+function stopConversation(){
+ running=false;
+ conversationId++;
+ if("speechSynthesis" in window) speechSynthesis.cancel();
+
+ assistants.forEach(person=>{
+  document.getElementById("card-"+person.id).classList.remove("active");
+ });
+
+ document.getElementById("status").textContent="Conversación detenida.";
+}
+
+function pauseSpeech(){
+ if("speechSynthesis" in window && speechSynthesis.speaking){
+  speechSynthesis.pause();
+  document.getElementById("status").textContent="Audio en pausa.";
+ }
+}
+
+function resumeSpeech(){
+ if("speechSynthesis" in window){
+  speechSynthesis.resume();
+  document.getElementById("status").textContent="Reanudando conversación.";
+ }
+}
+
+function repeatSpeech(){
+ if(!conversation.length || currentIndex>=assistants.length){
+  document.getElementById("status").textContent=
+   "Primero inicia una conversación.";
+  return;
+ }
+
+ const person=assistants[currentIndex];
+ const text=currentText;
+ const id=conversationId;
+
+ speechSynthesis.cancel();
+
+ const utterance=new SpeechSynthesisUtterance(text);
+ utterance.rate=Number(document.getElementById("speed").value);
+
+ const selectedVoice=document.getElementById("voice-"+person.id).value;
+ const voice=voices.find(v=>v.name===selectedVoice);
+ if(voice) utterance.voice=voice;
+
+ highlight(person);
+ speechSynthesis.speak(utterance);
+ document.getElementById("status").textContent=
+  "Repitiendo a "+person.name+".";
+}
+
+</script>
+</body>
+</html>
